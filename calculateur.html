@@ -494,6 +494,45 @@
   color: #1f2937;
 }
 
+/* Google Places Autocomplete Styling */
+.pac-container {
+  background-color: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+  margin-top: 4px !important;
+  font-family: inherit !important;
+  z-index: 1000 !important;
+}
+
+.pac-item {
+  padding: 12px 16px !important;
+  border-bottom: 1px solid #f1f5f9 !important;
+  cursor: pointer !important;
+  font-size: 14px !important;
+  color: #374151 !important;
+}
+
+.pac-item:last-child {
+  border-bottom: none !important;
+}
+
+.pac-item:hover,
+.pac-item-selected {
+  background-color: #f8fafc !important;
+  color: #1f2937 !important;
+}
+
+.pac-item-query {
+  color: #1f2937 !important;
+  font-weight: 500 !important;
+}
+
+.pac-matched {
+  font-weight: 600 !important;
+  color: #3b82f6 !important;
+}
+
 .form-group {
   position: relative;
 }
@@ -2577,15 +2616,38 @@ margin: 0rem !important;
       });
       
       // Initialize address autocomplete
-      initAddressAutocomplete();
+      initGoogleMapsAutocomplete();
     }
 
-    // Simple Address Autocomplete (No API Key Required)
-    function initAddressAutocomplete() {
+    // Google Places Autocomplete with Environment Variable
+    function initGoogleMapsAutocomplete() {
+      // Get API key from environment variable (set in Vercel)
+      fetch('/api/get-maps-key')
+        .then(response => response.json())
+        .then(data => {
+          if (data.apiKey) {
+            // Load Google Maps API dynamically
+            const script = document.createElement('script');
+            script.src = `https://maps.googleapis.com/maps/api/js?key=${data.apiKey}&libraries=places&callback=initAutocomplete`;
+            script.async = true;
+            script.defer = true;
+            document.head.appendChild(script);
+          } else {
+            console.warn('Google Maps API key not found, falling back to simple autocomplete');
+            initSimpleAutocomplete();
+          }
+        })
+        .catch(error => {
+          console.warn('Failed to load Google Maps API key, falling back to simple autocomplete:', error);
+          initSimpleAutocomplete();
+        });
+    }
+
+    // Fallback simple autocomplete
+    function initSimpleAutocomplete() {
       const fromInput = document.getElementById('address-from');
       const toInput = document.getElementById('address-to');
       
-      // Common Quebec cities and areas for suggestions
       const quebecCities = [
         'Montréal, QC', 'Québec, QC', 'Laval, QC', 'Gatineau, QC', 'Longueuil, QC',
         'Sherbrooke, QC', 'Saguenay, QC', 'Lévis, QC', 'Trois-Rivières, QC', 'Terrebonne, QC',
@@ -2617,7 +2679,6 @@ margin: 0rem !important;
         });
         
         input.addEventListener('blur', function() {
-          // Delay hiding to allow clicking on suggestions
           setTimeout(hideAutocomplete, 200);
         });
         
@@ -2651,6 +2712,40 @@ margin: 0rem !important;
       
       if (fromInput) createAutocomplete(fromInput, quebecCities);
       if (toInput) createAutocomplete(toInput, quebecCities);
+    }
+
+    // Google Places Autocomplete callback
+    function initAutocomplete() {
+      const fromInput = document.getElementById('address-from');
+      const toInput = document.getElementById('address-to');
+      
+      if (fromInput) {
+        const fromAutocomplete = new google.maps.places.Autocomplete(fromInput, {
+          types: ['address'],
+          componentRestrictions: { country: 'ca' }
+        });
+        
+        fromAutocomplete.addListener('place_changed', function() {
+          const place = fromAutocomplete.getPlace();
+          if (place.formatted_address) {
+            fromInput.value = place.formatted_address;
+          }
+        });
+      }
+
+      if (toInput) {
+        const toAutocomplete = new google.maps.places.Autocomplete(toInput, {
+          types: ['address'],
+          componentRestrictions: { country: 'ca' }
+        });
+        
+        toAutocomplete.addListener('place_changed', function() {
+          const place = toAutocomplete.getPlace();
+          if (place.formatted_address) {
+            toInput.value = place.formatted_address;
+          }
+        });
+      }
     }
 
     function showStep(stepNumber) {
