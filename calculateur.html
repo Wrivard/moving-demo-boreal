@@ -2018,16 +2018,16 @@ margin: 0rem !important;
                       </select>
                     </div>
                     <div class="form-group">
-                      <label for="distance" class="form-label">Distance (km) *</label>
-                      <input type="number" id="distance" name="distance" class="form-input" placeholder="25" min="0" max="1000" required>
-                    </div>
-                    <div class="form-group">
                       <label for="address-from" class="form-label">Adresse de départ *</label>
                       <input type="text" id="address-from" name="address-from" class="form-input" placeholder="123 Rue Example, Montréal, QC" required>
                     </div>
                     <div class="form-group">
                       <label for="address-to" class="form-label">Adresse de destination *</label>
                       <input type="text" id="address-to" name="address-to" class="form-input" placeholder="456 Avenue Destination, Laval, QC" required>
+                    </div>
+                    <div class="form-group">
+                      <label for="distance" class="form-label">Distance (km)</label>
+                      <input type="number" id="distance" name="distance" class="form-input" placeholder="Calcul automatique..." readonly>
                     </div>
                     <div class="form-group">
                       <label class="form-label">Étages (sans ascenseur) *</label>
@@ -3255,6 +3255,9 @@ margin: 0rem !important;
       // Get residence type
       const residence = data.residence;
       const distance = parseInt(data.distance) || 0;
+      
+      // If distance is 0, use a default minimum for calculation
+      const effectiveDistance = distance > 0 ? distance : 5;
       const floors = parseInt(data.floors) || 0;
       
       // Get selected services
@@ -3297,7 +3300,7 @@ margin: 0rem !important;
 
       // Calculate costs
       const residencePrice = basePrices[residence] || basePrices['2-bedroom'];
-      const distanceCost = Math.max(0, (distance - 10) * 2.50);
+      const distanceCost = Math.max(0, (effectiveDistance - 10) * 1.00);
       const servicesCost = services.reduce((total, service) => total + (servicePrices[service] || 0), 0);
       const complexItemsCost = complexItems.reduce((total, item) => total + (complexItemPrices[item] || 0), 0);
       const floorCost = floorPrices[floors] || 0;
@@ -3311,6 +3314,7 @@ margin: 0rem !important;
         breakdown: {
           basePrice: residencePrice.min,
           distanceCost: Math.round(distanceCost * 100) / 100,
+          distanceUsed: effectiveDistance,
           servicesCost,
           complexItemsCost,
           floorCost
@@ -3342,7 +3346,7 @@ margin: 0rem !important;
         </div>
         ${quote.breakdown.distanceCost > 0 ? `
         <div class="breakdown-item">
-          <span class="breakdown-label">Frais de déplacement</span>
+          <span class="breakdown-label">Frais de déplacement (${quote.breakdown.distanceUsed} km)</span>
           <span class="breakdown-value">$${quote.breakdown.distanceCost}</span>
         </div>
         ` : ''}
