@@ -2383,7 +2383,6 @@ margin: 0rem !important;
       // Initialize Flatpickr
       flatpickr("#date", {
         dateFormat: "d/m/Y",
-        locale: "fr",
         allowInput: false,
         clickOpens: true,
         placeholder: "Sélectionner une date"
@@ -2477,136 +2476,142 @@ margin: 0rem !important;
     document.getElementById('prev-btn').addEventListener('click', prevStep);
 
     // Form submission
-    document.getElementById('moving-calculator-form').addEventListener('submit', async function(e) {
+    document.getElementById('moving-calculator-form').addEventListener('submit', function(e) {
       e.preventDefault();
       
       if (!validateCurrentStep()) {
         return;
       }
 
-      const formData = new FormData(this);
-      const data = Object.fromEntries(formData.entries());
-      
-      // Collect radio button values
-      const serviceType = document.querySelector('input[name="Multi-Form-11-Service"]:checked')?.value;
-      const floors = document.querySelector('input[name="Multi-Form-11-Floors"]:checked')?.value;
-      
-      // Collect checkbox values
-      const services = Array.from(document.querySelectorAll('input[name="Multi-Form-11-Services"]:checked')).map(cb => cb.value);
-      const complexItems = Array.from(document.querySelectorAll('input[name="Multi-Form-11-Complex"]:checked')).map(cb => cb.value);
-      
-      const payload = {
-        ...data,
-        serviceType,
-        floors,
-        services,
-        complexItems
-      };
-
-      try {
-        const response = await fetch('/api/calculate-quote', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(payload)
-        });
-
-        const result = await response.json();
-        
-        if (result.success) {
-          displayQuote(result.quote);
-        } else {
-          throw new Error(result.message || 'Erreur lors du calcul');
-        }
-      } catch (error) {
-        console.error('Error:', error);
-        // For demo purposes, always show success
-        displayQuote({
-          totalPrice: 2063,
-          maxPrice: 2763,
-          breakdown: {
-            basePrice: 1500,
-            distanceCost: 37.5,
-            servicesCost: 200,
-            complexItemsCost: 150,
-            floorCost: 175.5
-          },
-          details: {
-            serviceType: 'Déménagement résidentiel',
-            residence: 'Maison (moyenne)',
-            distance: '25 km',
-            services: ['Emballage professionnel', 'Montage/Démontage meubles'],
-            complexItems: ['Piano'],
-            floors: '2 étages'
-          }
-        });
-      }
+      const quote = calculateQuote();
+      displayQuote(quote);
     });
 
-    function displayQuote(quote) {
-      const successMessage = document.querySelector('.form_message-success');
-      const successWrapper = document.querySelector('.form_message-success-wrapper');
+    function calculateQuote() {
+      const formData = new FormData(document.getElementById('moving-calculator-form'));
+      const data = Object.fromEntries(formData.entries());
       
-      successMessage.innerHTML = `
-        <div style="text-align: left; margin-bottom: 30px;">
-          <h3 style="color: #ffffff; font-size: 24px; font-weight: bold; margin-bottom: 10px;">VOTRE ESTIMATION EST PRÊTE</h3>
-          <div style="color: #3b82f6; font-size: 32px; font-weight: bold; margin-bottom: 5px;">${quote.totalPrice}$ - ${quote.maxPrice}$</div>
-          <div style="color: #888888; font-size: 14px;">Prix final estimé</div>
+      // Get residence type
+      const residence = data.residence;
+      const distance = parseInt(data.distance) || 0;
+      const floors = parseInt(data.floors) || 0;
+      
+      // Get selected services
+      const services = Array.from(document.querySelectorAll('input[name="services"]:checked')).map(cb => cb.value);
+      const complexItems = Array.from(document.querySelectorAll('input[name="complex"]:checked')).map(cb => cb.value);
+      
+      // Base prices by residence type
+      const basePrices = {
+        'studio': { min: 400, max: 600 },
+        '1-bedroom': { min: 600, max: 900 },
+        '2-bedroom': { min: 800, max: 1200 },
+        '3-bedroom': { min: 1000, max: 1500 },
+        '4-bedroom': { min: 1200, max: 1800 },
+        'house-small': { min: 1000, max: 1500 },
+        'house-medium': { min: 1200, max: 1800 },
+        'house-large': { min: 1500, max: 2200 }
+      };
+
+      // Service prices
+      const servicePrices = {
+        'packing': 200,
+        'assembly': 150,
+        'cleaning': 100,
+        'storage': 300
+      };
+
+      const complexItemPrices = {
+        'piano': 200,
+        'pool-table': 150,
+        'antiques': 100,
+        'appliances': 75
+      };
+
+      const floorPrices = {
+        0: 0,
+        1: 50,
+        2: 100,
+        3: 150
+      };
+
+      // Calculate costs
+      const residencePrice = basePrices[residence] || basePrices['2-bedroom'];
+      const distanceCost = Math.max(0, (distance - 10) * 2.50);
+      const servicesCost = services.reduce((total, service) => total + (servicePrices[service] || 0), 0);
+      const complexItemsCost = complexItems.reduce((total, item) => total + (complexItemPrices[item] || 0), 0);
+      const floorCost = floorPrices[floors] || 0;
+
+      const totalMin = residencePrice.min + distanceCost + servicesCost + complexItemsCost + floorCost;
+      const totalMax = residencePrice.max + distanceCost + servicesCost + complexItemsCost + floorCost;
+
+      return {
+        totalPrice: Math.round(totalMin),
+        maxPrice: Math.round(totalMax),
+        breakdown: {
+          basePrice: residencePrice.min,
+          distanceCost: Math.round(distanceCost * 100) / 100,
+          servicesCost,
+          complexItemsCost,
+          floorCost
+        }
+      };
+    }
+
+    function displayQuote(quote) {
+      const resultsContainer = document.getElementById('results');
+      const priceAmount = document.getElementById('price-amount');
+      const priceRange = document.getElementById('price-range');
+      const priceBreakdown = document.getElementById('price-breakdown');
+      
+      priceAmount.textContent = `$${quote.totalPrice}`;
+      priceRange.textContent = `- $${quote.maxPrice}`;
+      
+      priceBreakdown.innerHTML = `
+        <div class="breakdown-item">
+          <span class="breakdown-label">Prix de base</span>
+          <span class="breakdown-value">$${quote.breakdown.basePrice}</span>
         </div>
-        
-        <div style="margin-bottom: 30px;">
-          <h4 style="color: #ffffff; font-size: 18px; font-weight: 600; margin-bottom: 20px;">Détail de l'estimation</h4>
-          
-          <div style="border-bottom: 1px solid #333; padding-bottom: 15px; margin-bottom: 15px;">
-            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
-              <span style="color: #ffffff; font-weight: 600;">Prix de base</span>
-              <span style="color: #3b82f6; font-weight: bold; min-width: 80px; text-align: right;">${quote.breakdown.basePrice}$</span>
-            </div>
-            <div style="color: #888888; font-size: 12px; margin-left: 0;">
-              • ${quote.details.serviceType}<br>
-              • ${quote.details.residence}<br>
-              ${quote.details.services.length > 0 ? '• ' + quote.details.services.join('<br>• ') + '<br>' : ''}
-              ${quote.details.complexItems.length > 0 ? '• ' + quote.details.complexItems.join('<br>• ') + '<br>' : ''}
-            </div>
-          </div>
-          
-          ${quote.breakdown.distanceCost > 0 ? `
-          <div style="border-bottom: 1px solid #333; padding-bottom: 15px; margin-bottom: 15px;">
-            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
-              <span style="color: #ffffff; font-weight: 600;">Frais de déplacement</span>
-              <span style="color: #3b82f6; font-weight: bold; min-width: 80px; text-align: right;">${quote.breakdown.distanceCost}$</span>
-            </div>
-            <div style="color: #888888; font-size: 12px;">2.50$/km après 10km gratuits (${quote.details.distance})</div>
-          </div>
-          ` : ''}
-          
-          ${quote.breakdown.floorCost > 0 ? `
-          <div style="border-bottom: 1px solid #333; padding-bottom: 15px; margin-bottom: 15px;">
-            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
-              <span style="color: #ffffff; font-weight: 600;">Frais d'étages</span>
-              <span style="color: #3b82f6; font-weight: bold; min-width: 80px; text-align: right;">${quote.breakdown.floorCost}$</span>
-            </div>
-            <div style="color: #888888; font-size: 12px;">${quote.details.floors} sans ascenseur</div>
-          </div>
-          ` : ''}
-          
-          <div style="border-top: 2px solid #3b82f6; padding-top: 15px; margin-top: 20px;">
-            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-              <span style="color: #ffffff; font-size: 18px; font-weight: bold;">Total estimé</span>
-              <span style="color: #3b82f6; font-size: 20px; font-weight: bold; min-width: 80px; text-align: right;">${quote.totalPrice}$ - ${quote.maxPrice}$</span>
-            </div>
-          </div>
+        ${quote.breakdown.distanceCost > 0 ? `
+        <div class="breakdown-item">
+          <span class="breakdown-label">Frais de déplacement</span>
+          <span class="breakdown-value">$${quote.breakdown.distanceCost}</span>
         </div>
-        
-        <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #333;">
-          <p style="color: #ffffff; font-size: 16px; margin-bottom: 10px;">Un expert vous contactera dans les 48h pour confirmer votre estimation et planifier votre déménagement.</p>
-          <p style="color: #888888; font-size: 12px; margin: 0;">* Cette estimation est indicative. Le prix final sera plus précis lors de l'appel de notre expert.</p>
+        ` : ''}
+        ${quote.breakdown.servicesCost > 0 ? `
+        <div class="breakdown-item">
+          <span class="breakdown-label">Services additionnels</span>
+          <span class="breakdown-value">$${quote.breakdown.servicesCost}</span>
+        </div>
+        ` : ''}
+        ${quote.breakdown.complexItemsCost > 0 ? `
+        <div class="breakdown-item">
+          <span class="breakdown-label">Articles complexes</span>
+          <span class="breakdown-value">$${quote.breakdown.complexItemsCost}</span>
+        </div>
+        ` : ''}
+        ${quote.breakdown.floorCost > 0 ? `
+        <div class="breakdown-item">
+          <span class="breakdown-label">Frais d'étages</span>
+          <span class="breakdown-value">$${quote.breakdown.floorCost}</span>
+        </div>
+        ` : ''}
+        <div class="breakdown-item">
+          <span class="breakdown-label">Total estimé</span>
+          <span class="breakdown-value">$${quote.totalPrice} - $${quote.maxPrice}</span>
         </div>
       `;
       
-      successWrapper.style.display = 'block';
-      document.querySelector('.multi-form11_form-wrapper').style.display = 'none';
+      resultsContainer.style.display = 'block';
+      document.querySelector('.form-container').style.display = 'none';
+    }
+
+    function resetForm() {
+      document.getElementById('moving-calculator-form').reset();
+      document.getElementById('results').style.display = 'none';
+      document.querySelector('.form-container').style.display = 'block';
+      currentStep = 0;
+      showStep(0);
+      updateProgress();
     }
 
     // Initialize when page loads
