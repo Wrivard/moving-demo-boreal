@@ -2667,6 +2667,12 @@ margin: 0rem !important;
       // Check if script is already being loaded
       if (document.querySelector('script[src*="maps.googleapis.com"]')) {
         console.log('Google Maps script already exists, waiting for load');
+        // Wait a bit and try to initialize if Google Maps is available
+        setTimeout(() => {
+          if (window.google && window.google.maps && window.google.maps.places) {
+            initGooglePlacesAutocomplete();
+          }
+        }, 1000);
         return;
       }
 
@@ -2733,6 +2739,16 @@ margin: 0rem !important;
         console.log('Using Google Maps Distance Matrix API');
         calculateDistanceWithAPI(fromAddress, toAddress);
       } else {
+        console.log('Google Maps not loaded, trying simple estimation');
+        // Try simple estimation immediately if Google Maps is not available
+        const estimatedDistance = estimateDistanceFromAddresses(fromAddress, toAddress);
+        if (estimatedDistance > 0) {
+          const distanceInput = document.getElementById('distance');
+          distanceInput.value = estimatedDistance;
+          distanceInput.disabled = false;
+          showDistanceMessage(`Distance estimée: ${estimatedDistance} km (basée sur l'analyse des adresses)`, 'success');
+          return;
+        }
         // Try to get API key and load Google Maps
         fetch('/api/get-maps-key')
           .then(response => response.json())
@@ -3028,6 +3044,21 @@ margin: 0rem !important;
     // Global callback function for Google Maps API
     window.initGooglePlacesAutocomplete = function() {
       console.log('Google Maps API loaded, initializing autocomplete');
+      
+      // Set the API key globally for Distance Matrix service
+      if (window.google && window.google.maps) {
+        // Get the API key from the script src
+        const script = document.querySelector('script[src*="maps.googleapis.com"]');
+        if (script) {
+          const urlParams = new URLSearchParams(script.src.split('?')[1]);
+          const apiKey = urlParams.get('key');
+          if (apiKey) {
+            // Set the API key for Distance Matrix service
+            window.google.maps.apiKey = apiKey;
+            console.log('API key set for Distance Matrix service');
+          }
+        }
+      }
       
       const fromInput = document.getElementById('address-from');
       const toInput = document.getElementById('address-to');
