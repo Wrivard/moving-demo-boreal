@@ -2699,6 +2699,7 @@ margin: 0rem !important;
       script.defer = true;
       script.onerror = function() {
         console.warn('Failed to load Google Maps API script');
+        initFallbackAutocomplete();
       };
       
       // Add to head
@@ -2727,63 +2728,90 @@ margin: 0rem !important;
       distanceInput.placeholder = 'Calculating...';
       distanceInput.disabled = true;
       
-      // Try to get API key for distance calculation
-      fetch('/api/get-maps-key')
-        .then(response => response.json())
-        .then(data => {
-          if (data.apiKey && data.apiKey !== 'undefined') {
-            calculateDistanceWithAPI(fromAddress, toAddress, data.apiKey);
-          } else {
-            // Fallback to manual entry
-            distanceInput.value = '';
-            distanceInput.disabled = false;
-            distanceInput.placeholder = 'Enter distance manually';
-          }
-        })
-        .catch(error => {
-          console.warn('Failed to get API key for distance calculation:', error);
-          distanceInput.value = '';
-          distanceInput.disabled = false;
-          distanceInput.placeholder = 'Enter distance manually';
-        });
+      // Check if Google Maps is loaded and try Distance Matrix API
+      if (window.google && window.google.maps && window.google.maps.DistanceMatrixService) {
+        console.log('Using Google Maps Distance Matrix API');
+        calculateDistanceWithAPI(fromAddress, toAddress);
+      } else {
+        // Try to get API key and load Google Maps
+        fetch('/api/get-maps-key')
+          .then(response => response.json())
+          .then(data => {
+            if (data.apiKey && data.apiKey !== 'undefined') {
+              // Load Google Maps if not already loaded
+              if (!window.google || !window.google.maps) {
+                loadGoogleMapsScript(data.apiKey);
+                // Wait for Google Maps to load, then try again
+                setTimeout(() => {
+                  if (window.google && window.google.maps && window.google.maps.DistanceMatrixService) {
+                    calculateDistanceWithAPI(fromAddress, toAddress);
+                  } else {
+                    tryFallbackDistanceCalculation(fromAddress, toAddress);
+                  }
+                }, 2000);
+              } else {
+                calculateDistanceWithAPI(fromAddress, toAddress);
+              }
+            } else {
+              // Fallback to simple estimation
+              tryFallbackDistanceCalculation(fromAddress, toAddress);
+            }
+          })
+          .catch(error => {
+            console.warn('Failed to get API key for distance calculation:', error);
+            tryFallbackDistanceCalculation(fromAddress, toAddress);
+          });
+      }
     }
 
-    async function calculateDistanceWithAPI(fromAddress, toAddress, apiKey) {
+    async function calculateDistanceWithAPI(fromAddress, toAddress) {
       try {
-        // Use our server-side API endpoint to avoid CORS issues
-        const response = await fetch('/api/calculate-distance', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            fromAddress: fromAddress,
-            toAddress: toAddress
-          })
+        // Check if Google Maps is loaded and has Distance Matrix service
+        if (!window.google || !window.google.maps || !window.google.maps.DistanceMatrixService) {
+          throw new Error('Google Maps Distance Matrix service not available');
+        }
+
+        // Use Google Maps JavaScript API Distance Matrix service
+        const service = new google.maps.DistanceMatrixService();
+        
+        const request = {
+          origins: [fromAddress],
+          destinations: [toAddress],
+          travelMode: google.maps.TravelMode.DRIVING,
+          unitSystem: google.maps.UnitSystem.METRIC,
+          avoidHighways: false,
+          avoidTolls: false
+        };
+
+        return new Promise((resolve, reject) => {
+          service.getDistanceMatrix(request, (response, status) => {
+            if (status === google.maps.DistanceMatrixStatus.OK) {
+              const element = response.rows[0].elements[0];
+              
+              if (element.status === google.maps.DistanceMatrixElementStatus.OK) {
+                const distanceKm = Math.round(element.distance.value / 1000);
+                
+                document.getElementById('distance').value = distanceKm;
+                document.getElementById('distance').disabled = false;
+                
+                // Show success message with duration
+                let message = `Distance calculated: ${distanceKm} km`;
+                if (element.duration) {
+                  message += ` (${element.duration.text})`;
+                }
+                showDistanceMessage(message, 'success');
+                resolve(distanceKm);
+              } else {
+                throw new Error(`Distance Matrix element status: ${element.status}`);
+              }
+            } else {
+              throw new Error(`Distance Matrix status: ${status}`);
+            }
+          });
         });
         
-        if (response.ok) {
-          const data = await response.json();
-          
-          if (data.success && data.distance) {
-            document.getElementById('distance').value = data.distance;
-            document.getElementById('distance').disabled = false;
-            
-            // Show success message with duration if available
-            let message = `Distance calculated: ${data.distance} km`;
-            if (data.duration) {
-              message += ` (${data.duration})`;
-            }
-            showDistanceMessage(message, 'success');
-          } else {
-            throw new Error(data.error || 'Distance calculation failed');
-          }
-        } else {
-          const errorData = await response.json();
-          throw new Error(errorData.error || `HTTP ${response.status}`);
-        }
       } catch (error) {
-        console.warn('Distance calculation failed:', error);
+        console.warn('Distance Matrix API failed:', error);
         // Try fallback calculation using geocoding
         tryFallbackDistanceCalculation(fromAddress, toAddress);
       }
