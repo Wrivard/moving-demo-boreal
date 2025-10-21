@@ -458,82 +458,104 @@
   background: #ffffff !important;
   border: 1px solid #e2e8f0 !important;
   border-radius: 12px !important;
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1) !important;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04) !important;
   color: #1f2937 !important;
   font-family: inherit !important;
+  z-index: 9999 !important;
 }
 
 .flatpickr-months {
   background: #f8fafc !important;
   border-radius: 12px 12px 0 0 !important;
-  padding: 16px !important;
+  padding: 20px !important;
+  border-bottom: 1px solid #e2e8f0 !important;
 }
 
 .flatpickr-month {
   color: #1e293b !important;
   font-weight: 600 !important;
+  font-size: 16px !important;
 }
 
 .flatpickr-current-month .flatpickr-monthDropdown-months {
   background: #ffffff !important;
   color: #1e293b !important;
-  border: 1px solid #e2e8f0 !important;
-  border-radius: 6px !important;
-  padding: 4px 8px !important;
+  border: 1px solid #d1d5db !important;
+  border-radius: 8px !important;
+  padding: 6px 12px !important;
+  font-weight: 600 !important;
+  font-size: 14px !important;
+  margin: 0 4px !important;
 }
 
 .flatpickr-current-month input.cur-year {
   background: #ffffff !important;
   color: #1e293b !important;
-  border: 1px solid #e2e8f0 !important;
-  border-radius: 6px !important;
-  padding: 4px 8px !important;
+  border: 1px solid #d1d5db !important;
+  border-radius: 8px !important;
+  padding: 6px 12px !important;
+  font-weight: 600 !important;
+  font-size: 14px !important;
+  margin: 0 4px !important;
 }
 
 .flatpickr-weekdays {
   background: #f1f5f9 !important;
   color: #64748b !important;
-  padding: 8px 0 !important;
+  padding: 12px 0 !important;
+  border-bottom: 1px solid #e2e8f0 !important;
 }
 
 .flatpickr-weekday {
   color: #64748b !important;
-  font-weight: 500 !important;
+  font-weight: 600 !important;
+  font-size: 12px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
 }
 
 .flatpickr-days {
   background: #ffffff !important;
-  padding: 8px !important;
+  padding: 12px !important;
 }
 
 .flatpickr-day {
   color: #1e293b !important;
   border: 1px solid transparent !important;
-  border-radius: 6px !important;
-  margin: 1px !important;
+  border-radius: 8px !important;
+  margin: 2px !important;
   transition: all 0.2s ease !important;
+  font-weight: 500 !important;
+  font-size: 14px !important;
+  width: 32px !important;
+  height: 32px !important;
+  line-height: 30px !important;
 }
 
 .flatpickr-day:hover {
   background: #f1f5f9 !important;
   border-color: #cbd5e1 !important;
   color: #1e293b !important;
+  transform: scale(1.05) !important;
 }
 
 .flatpickr-day.selected {
   background: #3b82f6 !important;
   color: #ffffff !important;
   border-color: #3b82f6 !important;
+  font-weight: 600 !important;
+  box-shadow: 0 4px 8px rgba(59, 130, 246, 0.3) !important;
 }
 
 .flatpickr-day.today {
   border-color: #3b82f6 !important;
   color: #3b82f6 !important;
   font-weight: 600 !important;
+  background: #eff6ff !important;
 }
 
 .flatpickr-day.today:hover {
-  background: #eff6ff !important;
+  background: #dbeafe !important;
   color: #3b82f6 !important;
 }
 
@@ -542,17 +564,33 @@
   color: #1e293b !important;
 }
 
+.flatpickr-day.disabled {
+  color: #d1d5db !important;
+  background: #f9fafb !important;
+  cursor: not-allowed !important;
+}
+
+.flatpickr-day.disabled:hover {
+  background: #f9fafb !important;
+  color: #d1d5db !important;
+  transform: none !important;
+}
+
 .flatpickr-prev-month,
 .flatpickr-next-month {
   color: #64748b !important;
-  border-radius: 6px !important;
+  border-radius: 8px !important;
   transition: all 0.2s ease !important;
+  width: 32px !important;
+  height: 32px !important;
+  line-height: 30px !important;
 }
 
 .flatpickr-prev-month:hover,
 .flatpickr-next-month:hover {
   background: #f1f5f9 !important;
   color: #1e293b !important;
+  transform: scale(1.1) !important;
 }
 
 /* Date input styling */
@@ -2474,7 +2512,14 @@ margin: 0rem !important;
         dateFormat: "d/m/Y",
         allowInput: false,
         clickOpens: true,
-        placeholder: "Sélectionner une date"
+        placeholder: "Sélectionner une date",
+        minDate: "today",
+        disable: [
+          function(date) {
+            // Disable past dates
+            return date < new Date().setHours(0, 0, 0, 0);
+          }
+        ]
       });
     }
 
