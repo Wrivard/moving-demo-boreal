@@ -26,11 +26,11 @@
 
 /* Multi-step form - Fixed visibility */
 [data-form="step"] {
-  display: none;
+  display: none !important;
 }
 
 [data-form="step"]:first-child {
-  display: block;
+  display: block !important;
 }
 
 /* Progress bar - Blue theme */
@@ -384,58 +384,58 @@
   color: #888 !important;
 }
 
-/* Flatpickr dark theme */
+/* Flatpickr blue theme */
 .flatpickr-calendar {
-  background: #1a1a1a !important;
-  border: 1px solid #555 !important;
+  background: #ffffff !important;
+  border: 1px solid #d1d5db !important;
   border-radius: 8px !important;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3) !important;
-  color: #ffffff !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1) !important;
+  color: #1f2937 !important;
 }
 
 .flatpickr-months {
-  background: #2a2a2a !important;
+  background: #f9fafb !important;
   border-radius: 8px 8px 0 0 !important;
   padding: 10px !important;
 }
 
 .flatpickr-month {
-  color: #ffffff !important;
+  color: #1f2937 !important;
 }
 
 .flatpickr-current-month .flatpickr-monthDropdown-months {
-  background: #2a2a2a !important;
-  color: #ffffff !important;
-  border: 1px solid #555 !important;
+  background: #ffffff !important;
+  color: #1f2937 !important;
+  border: 1px solid #d1d5db !important;
 }
 
 .flatpickr-current-month input.cur-year {
-  background: #2a2a2a !important;
-  color: #ffffff !important;
-  border: 1px solid #555 !important;
+  background: #ffffff !important;
+  color: #1f2937 !important;
+  border: 1px solid #d1d5db !important;
 }
 
 .flatpickr-weekdays {
-  background: #2a2a2a !important;
-  color: #ffffff !important;
+  background: #f9fafb !important;
+  color: #6b7280 !important;
 }
 
 .flatpickr-weekday {
-  color: #ffffff !important;
+  color: #6b7280 !important;
 }
 
 .flatpickr-days {
-  background: #1a1a1a !important;
+  background: #ffffff !important;
 }
 
 .flatpickr-day {
-  color: #ffffff !important;
+  color: #1f2937 !important;
   border: 1px solid transparent !important;
 }
 
 .flatpickr-day:hover {
-  background: #333 !important;
-  border-color: #555 !important;
+  background: #f3f4f6 !important;
+  border-color: #d1d5db !important;
 }
 
 .flatpickr-day.selected {
@@ -450,22 +450,22 @@
 }
 
 .flatpickr-day.today:hover {
-  background: #333 !important;
+  background: #f3f4f6 !important;
 }
 
 .flatpickr-day.inRange {
-  background: #333 !important;
-  color: #ffffff !important;
+  background: #eff6ff !important;
+  color: #1f2937 !important;
 }
 
 .flatpickr-prev-month,
 .flatpickr-next-month {
-  color: #ffffff !important;
+  color: #6b7280 !important;
 }
 
 .flatpickr-prev-month:hover,
 .flatpickr-next-month:hover {
-  background: #333 !important;
+  background: #f3f4f6 !important;
 }
 
 /* ===== FORM LAYOUT IMPROVEMENTS ===== */
@@ -579,6 +579,7 @@
   border-radius: 8px !important;
   transition: all 0.2s ease !important;
   box-sizing: border-box !important;
+  height: 48px !important;
 }
 
 .form_input:focus, .form_select:focus, .w-select:focus {
@@ -593,6 +594,8 @@
 
 /* Radio button improvements */
 .form_radio {
+  position: relative !important;
+  cursor: pointer !important;
   margin-bottom: 16px !important;
   padding: 12px 16px !important;
   background: #f9fafb !important;
@@ -606,6 +609,15 @@
   border-color: #d1d5db !important;
 }
 
+.form_radio input[type="radio"] {
+  position: absolute !important;
+  opacity: 0 !important;
+  cursor: pointer !important;
+  margin: 0 !important;
+  width: 16px !important;
+  height: 16px !important;
+}
+
 .form_radio input[type="radio"]:checked + .w-form-label {
   color: #1f2937 !important;
   font-weight: 500 !important;
@@ -617,13 +629,48 @@
 }
 
 .form_radio .w-form-label {
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
   color: #374151 !important;
   font-size: 16px !important;
   line-height: 1.5 !important;
+  margin: 0 !important;
+}
+
+.form_radio .w-form-label::before {
+  content: '' !important;
+  width: 16px !important;
+  height: 16px !important;
+  border: 2px solid #d1d5db !important;
+  border-radius: 50% !important;
+  background: transparent !important;
+  margin-right: 8px !important;
+  transition: all 0.2s ease !important;
+}
+
+.form_radio input[type="radio"]:checked + .w-form-label::before {
+  border-color: #3b82f6 !important;
+  background: #3b82f6 !important;
+}
+
+.form_radio input[type="radio"]:checked + .w-form-label::after {
+  content: '' !important;
+  position: absolute !important;
+  left: 4px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  width: 6px !important;
+  height: 6px !important;
+  border-radius: 50% !important;
+  background: #ffffff !important;
 }
 
 /* Checkbox improvements */
 .form_checkbox {
+  position: relative !important;
+  cursor: pointer !important;
   margin-bottom: 16px !important;
   padding: 12px 16px !important;
   background: #f9fafb !important;
@@ -637,6 +684,15 @@
   border-color: #d1d5db !important;
 }
 
+.form_checkbox input[type="checkbox"] {
+  position: absolute !important;
+  opacity: 0 !important;
+  cursor: pointer !important;
+  margin: 0 !important;
+  width: 16px !important;
+  height: 16px !important;
+}
+
 .form_checkbox input[type="checkbox"]:checked + .w-form-label {
   color: #1f2937 !important;
   font-weight: 500 !important;
@@ -648,9 +704,41 @@
 }
 
 .form_checkbox .w-form-label {
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
   color: #374151 !important;
   font-size: 16px !important;
   line-height: 1.5 !important;
+  margin: 0 !important;
+}
+
+.form_checkbox .w-form-label::before {
+  content: '' !important;
+  width: 16px !important;
+  height: 16px !important;
+  border: 2px solid #d1d5db !important;
+  border-radius: 4px !important;
+  background: transparent !important;
+  margin-right: 8px !important;
+  transition: all 0.2s ease !important;
+}
+
+.form_checkbox input[type="checkbox"]:checked + .w-form-label::before {
+  border-color: #3b82f6 !important;
+  background: #3b82f6 !important;
+}
+
+.form_checkbox input[type="checkbox"]:checked + .w-form-label::after {
+  content: '✓' !important;
+  position: absolute !important;
+  left: 2px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  color: #ffffff !important;
+  font-size: 12px !important;
+  font-weight: bold !important;
 }
 
 /* Date picker improvements */
@@ -665,6 +753,8 @@
   border-radius: 8px !important;
   transition: all 0.2s ease !important;
   box-sizing: border-box !important;
+  height: 48px !important;
+  cursor: pointer !important;
 }
 
 .date-picker-input:focus {
