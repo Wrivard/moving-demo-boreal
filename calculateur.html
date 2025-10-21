@@ -2795,7 +2795,7 @@ margin: 0rem !important;
                 document.getElementById('distance').disabled = false;
                 
                 // Show success message with duration
-                let message = `Distance calculated: ${distanceKm} km`;
+                let message = `Distance calculée: ${distanceKm} km`;
                 if (element.duration) {
                   message += ` (${element.duration.text})`;
                 }
@@ -2834,7 +2834,7 @@ margin: 0rem !important;
             const distanceInput = document.getElementById('distance');
             distanceInput.value = distance;
             distanceInput.disabled = false;
-            showDistanceMessage(`Estimated distance: ${distance} km (straight line)`, 'success');
+              showDistanceMessage(`Distance estimée: ${distance} km (ligne droite)`, 'success');
             return;
           }
         }
@@ -2845,14 +2845,14 @@ margin: 0rem !important;
           const distanceInput = document.getElementById('distance');
           distanceInput.value = estimatedDistance;
           distanceInput.disabled = false;
-          showDistanceMessage(`Estimated distance: ${estimatedDistance} km (based on address analysis)`, 'success');
+          showDistanceMessage(`Distance estimée: ${estimatedDistance} km (basée sur l'analyse des adresses)`, 'success');
         } else {
           // Final fallback to manual entry
           const distanceInput = document.getElementById('distance');
           distanceInput.value = '';
           distanceInput.disabled = false;
           distanceInput.placeholder = 'Enter distance manually';
-          showDistanceMessage('Could not calculate distance automatically. Please enter manually.', 'warning');
+          showDistanceMessage('Impossible de calculer la distance automatiquement. Veuillez entrer manuellement.', 'warning');
         }
         
       } catch (error) {
@@ -2861,7 +2861,7 @@ margin: 0rem !important;
         distanceInput.value = '';
         distanceInput.disabled = false;
         distanceInput.placeholder = 'Enter distance manually';
-        showDistanceMessage('Could not calculate distance automatically. Please enter manually.', 'warning');
+        showDistanceMessage('Impossible de calculer la distance automatiquement. Veuillez entrer manuellement.', 'warning');
       }
     }
 
