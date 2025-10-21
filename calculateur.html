@@ -21,6 +21,71 @@
   -moz-osx-font-smoothing: grayscale;
   -o-font-smoothing: antialiased;
 }
+
+/* Fix radio buttons - make them visible and functional */
+input[type="radio"] {
+  opacity: 1 !important;
+  position: relative !important;
+  z-index: 1 !important;
+  margin-right: 8px;
+  width: 16px;
+  height: 16px;
+}
+
+/* Style radio button labels to be clickable */
+.form_radio-btn, .form_checkbox-btn {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  margin: 4px 0;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.form_radio-btn:hover, .form_checkbox-btn:hover {
+  border-color: #007bff;
+  background-color: #f8f9fa;
+}
+
+/* Style selected radio buttons */
+input[type="radio"]:checked + .form_radio-btn-label,
+input[type="radio"]:checked ~ .form_radio-btn-label {
+  color: #007bff;
+  font-weight: bold;
+}
+
+.form_radio-btn:has(input[type="radio"]:checked),
+.form_checkbox-btn:has(input[type="radio"]:checked) {
+  border-color: #007bff;
+  background-color: #e3f2fd;
+}
+
+/* Hide the custom Webflow radio button icons */
+.form_radio-btn-icon, .form_checkbox-btn-icon {
+  display: none !important;
+}
+
+/* Style the letter indicators */
+.form_radio-btn-letter {
+  background: #f0f0f0;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 12px;
+  font-weight: bold;
+  font-size: 12px;
+}
+
+.form_radio-btn:has(input[type="radio"]:checked) .form_radio-btn-letter,
+.form_checkbox-btn:has(input[type="radio"]:checked) .form_radio-btn-letter {
+  background: #007bff;
+  color: white;
+}
 </style>
 </head>
 <body>
@@ -406,29 +471,29 @@ margin: 0rem !important;
                               <div class="form_radio-btn-letter">
                                 <div>A</div>
                               </div>
-                              <div class="w-form-formradioinput w-form-formradioinput--inputType-custom form_radio-btn-icon w-radio-input"></div><input type="radio" name="Multi-form-11-Type" id="Multi-form-11-Type-Option-1" data-name="Multi-form 11 Type" style="opacity:0;position:absolute;z-index:-1" value="Multi-form 11 Type Option 1"><span class="form_radio-btn-label w-form-label" for="Multi-form-11-Type-Option-1">Déménagement résidentiel</span>
+                              <div class="w-form-formradioinput w-form-formradioinput--inputType-custom form_radio-btn-icon w-radio-input"></div><input type="radio" name="Multi-form-11-Type" id="Multi-form-11-Type-Option-1" data-name="Multi-form 11 Type" value="Multi-form 11 Type Option 1"><span class="form_radio-btn-label w-form-label" for="Multi-form-11-Type-Option-1">Déménagement résidentiel</span>
                             </label><label class="form_radio-btn is-active-inputactive w-radio">
                               <div class="form_radio-btn-letter is-active-inputactive">
                                 <div>B</div>
                               </div>
-                              <div class="w-form-formradioinput w-form-formradioinput--inputType-custom form_radio-btn-icon w-radio-input"></div><input type="radio" name="Multi-form-11-Type" id="Multi-form-11-Type-Option-2" data-name="Multi-form 11 Type" style="opacity:0;position:absolute;z-index:-1" value="Multi-form 11 Type Option 2"><span class="form_radio-btn-label w-form-label" for="Multi-form-11-Type-Option-2">Déménagement commercial</span>
+                              <div class="w-form-formradioinput w-form-formradioinput--inputType-custom form_radio-btn-icon w-radio-input"></div><input type="radio" name="Multi-form-11-Type" id="Multi-form-11-Type-Option-2" data-name="Multi-form 11 Type" value="Multi-form 11 Type Option 2"><span class="form_radio-btn-label w-form-label" for="Multi-form-11-Type-Option-2">Déménagement commercial</span>
                             </label><label class="form_radio-btn w-radio">
                               <div class="form_radio-btn-letter">
                                 <div>C</div>
                               </div>
-                              <div class="w-form-formradioinput w-form-formradioinput--inputType-custom form_radio-btn-icon w-radio-input"></div><input type="radio" name="Multi-form-11-Type" id="Multi-form-11-Type-Option-3" data-name="Multi-form 11 Type" style="opacity:0;position:absolute;z-index:-1" value="Multi-form 11 Type Option 3"><span class="form_radio-btn-label w-form-label" for="Multi-form-11-Type-Option-3">Transport longue distance</span>
+                              <div class="w-form-formradioinput w-form-formradioinput--inputType-custom form_radio-btn-icon w-radio-input"></div><input type="radio" name="Multi-form-11-Type" id="Multi-form-11-Type-Option-3" data-name="Multi-form 11 Type" value="Multi-form 11 Type Option 3"><span class="form_radio-btn-label w-form-label" for="Multi-form-11-Type-Option-3">Transport longue distance</span>
                             </label><label class="form_radio-btn w-radio">
                               <div class="form_radio-btn-letter">
                                 <div>D</div>
                               </div>
-                              <div class="w-form-formradioinput w-form-formradioinput--inputType-custom form_radio-btn-icon w-radio-input"></div><input type="radio" name="Multi-form-11-Type" id="Multi-form-11-Type-Option-4" data-name="Multi-form 11 Type" style="opacity:0;position:absolute;z-index:-1" value="Multi-form 11 Type Option 4"><span class="form_radio-btn-label w-form-label" for="Multi-form-11-Type-Option-4">Autre</span>
+                              <div class="w-form-formradioinput w-form-formradioinput--inputType-custom form_radio-btn-icon w-radio-input"></div><input type="radio" name="Multi-form-11-Type" id="Multi-form-11-Type-Option-4" data-name="Multi-form 11 Type" value="Multi-form 11 Type Option 4"><span class="form_radio-btn-label w-form-label" for="Multi-form-11-Type-Option-4">Autre</span>
                             </label></div>
                         </div>
                         <div class="multi-form11_field-wrapper"><label for="Multi-Form-11-Budget" class="form_field-label">Votre budget</label><select id="Multi-Form-11-Budget" name="Multi-Form-11-Budget" data-name="Multi Form 11 Budget" class="form_input is-select-input w-select">
                             <option value="">Sélectionnez...</option>
-                            <option value="First">First Choice</option>
-                            <option value="Second">Second Choice</option>
-                            <option value="Third">Third Choice</option>
+                            <option value="First">Moins de 2 000$</option>
+                            <option value="Second">2 000$ - 5 000$</option>
+                            <option value="Third">Plus de 5 000$</option>
                           </select></div>
                         <div class="multi-form11_field-wrapper"><label for="Multi-Form-11-Project" class="form_field-label">Détails du projet</label><input class="form_input w-input" maxlength="256" name="Multi-Form-11-Project" data-name="Multi Form 11 Project" placeholder="" type="text" id="Multi-Form-11-Project"></div>
                         <div id="w-node-_1e3b090f-dc9e-4f3f-e9be-ba53e64e79e2-68b891e4" class="button-group is-right">
@@ -450,17 +515,17 @@ margin: 0rem !important;
                         <div class="multi-form11_field-wrapper"><label for="Multi-Form-11-Company" class="form_field-label">Quel est le nom de votre entreprise?</label><input class="form_input w-input" maxlength="256" name="Multi-Form-11-Company" data-name="Multi Form 11 Company" placeholder="" type="text" id="Multi-Form-11-Company"></div>
                         <div class="multi-form11_field-wrapper"><label for="Form-1-Message" class="form_field-label">Combien de personnes seront impliquées dans le déménagement?</label>
                           <div class="multi-form11_radio-group"><label class="form_checkbox-btn w-radio">
-                              <div class="w-form-formradioinput w-form-formradioinput--inputType-custom form_checkbox-btn-icon w-radio-input"></div><input type="radio" name="Multi-form-11-People" id="Multi-form-11-People-Option-1" data-name="Multi-form 11 People" style="opacity:0;position:absolute;z-index:-1" value="Multi-form 11 People Option 1"><span class="form_checkbox-btn-label w-form-label" for="Multi-form-11-People-Option-1">Moi seul</span>
+                              <div class="w-form-formradioinput w-form-formradioinput--inputType-custom form_checkbox-btn-icon w-radio-input"></div><input type="radio" name="Multi-form-11-People" id="Multi-form-11-People-Option-1" data-name="Multi-form 11 People" value="Multi-form 11 People Option 1"><span class="form_checkbox-btn-label w-form-label" for="Multi-form-11-People-Option-1">Moi seul</span>
                             </label><label class="form_checkbox-btn is-active-inputactive w-radio">
-                              <div class="w-form-formradioinput w-form-formradioinput--inputType-custom form_checkbox-btn-icon w-radio-input"></div><input type="radio" name="Multi-form-11-People" id="Multi-form-11-People-Option-2" data-name="Multi-form 11 People" style="opacity:0;position:absolute;z-index:-1" value="Multi-form 11 People Option 2"><span class="form_checkbox-btn-label w-form-label" for="Multi-form-11-People-Option-2">2-10</span>
+                              <div class="w-form-formradioinput w-form-formradioinput--inputType-custom form_checkbox-btn-icon w-radio-input"></div><input type="radio" name="Multi-form-11-People" id="Multi-form-11-People-Option-2" data-name="Multi-form 11 People" value="Multi-form 11 People Option 2"><span class="form_checkbox-btn-label w-form-label" for="Multi-form-11-People-Option-2">2-10</span>
                             </label><label class="form_checkbox-btn w-radio">
-                              <div class="w-form-formradioinput w-form-formradioinput--inputType-custom form_checkbox-btn-icon w-radio-input"></div><input type="radio" name="Multi-form-11-People" id="Multi-form-11-People-Option-3" data-name="Multi-form 11 People" style="opacity:0;position:absolute;z-index:-1" value="Multi-form 11 People Option 3"><span class="form_checkbox-btn-label w-form-label" for="Multi-form-11-People-Option-3">11-50</span>
+                              <div class="w-form-formradioinput w-form-formradioinput--inputType-custom form_checkbox-btn-icon w-radio-input"></div><input type="radio" name="Multi-form-11-People" id="Multi-form-11-People-Option-3" data-name="Multi-form 11 People" value="Multi-form 11 People Option 3"><span class="form_checkbox-btn-label w-form-label" for="Multi-form-11-People-Option-3">11-50</span>
                             </label><label class="form_checkbox-btn w-radio">
-                              <div class="w-form-formradioinput w-form-formradioinput--inputType-custom form_checkbox-btn-icon w-radio-input"></div><input type="radio" name="Multi-form-11-People" id="Multi-form-11-People-Option-4" data-name="Multi-form 11 People" style="opacity:0;position:absolute;z-index:-1" value="Multi-form 11 People Option 4"><span class="form_checkbox-btn-label w-form-label" for="Multi-form-11-People-Option-4">51-100</span>
+                              <div class="w-form-formradioinput w-form-formradioinput--inputType-custom form_checkbox-btn-icon w-radio-input"></div><input type="radio" name="Multi-form-11-People" id="Multi-form-11-People-Option-4" data-name="Multi-form 11 People" value="Multi-form 11 People Option 4"><span class="form_checkbox-btn-label w-form-label" for="Multi-form-11-People-Option-4">51-100</span>
                             </label><label class="form_checkbox-btn w-radio">
-                              <div class="w-form-formradioinput w-form-formradioinput--inputType-custom form_checkbox-btn-icon w-radio-input"></div><input type="radio" name="Multi-form-11-People" id="Multi-form-11-People-Option-5" data-name="Multi-form 11 People" style="opacity:0;position:absolute;z-index:-1" value="Multi-form 11 People Option 5"><span class="form_checkbox-btn-label w-form-label" for="Multi-form-11-People-Option-5">101-500</span>
+                              <div class="w-form-formradioinput w-form-formradioinput--inputType-custom form_checkbox-btn-icon w-radio-input"></div><input type="radio" name="Multi-form-11-People" id="Multi-form-11-People-Option-5" data-name="Multi-form 11 People" value="Multi-form 11 People Option 5"><span class="form_checkbox-btn-label w-form-label" for="Multi-form-11-People-Option-5">101-500</span>
                             </label><label class="form_checkbox-btn w-radio">
-                              <div class="w-form-formradioinput w-form-formradioinput--inputType-custom form_checkbox-btn-icon w-radio-input"></div><input type="radio" name="Multi-form-11-People" id="Multi-form-11-People-Option-6" data-name="Multi-form 11 People" style="opacity:0;position:absolute;z-index:-1" value="Multi-form 11 People Option 6"><span class="form_checkbox-btn-label w-form-label" for="Multi-form-11-People-Option-6">501+</span>
+                              <div class="w-form-formradioinput w-form-formradioinput--inputType-custom form_checkbox-btn-icon w-radio-input"></div><input type="radio" name="Multi-form-11-People" id="Multi-form-11-People-Option-6" data-name="Multi-form 11 People" value="Multi-form 11 People Option 6"><span class="form_checkbox-btn-label w-form-label" for="Multi-form-11-People-Option-6">501+</span>
                             </label></div>
                         </div>
                         <div class="multi-form11_field-wrapper"><label for="Multi-Form-11-Link" class="form_field-label">Lien du site</label><input class="form_input w-input" maxlength="256" name="Multi-Form-11-Link" data-name="Multi Form 11 Link" placeholder="" type="text" id="Multi-Form-11-Link"></div>
@@ -480,11 +545,19 @@ margin: 0rem !important;
                         </div>
                       </div>
                       <div class="multi-form11_form-content">
-                        <div class="multi-form11_field-wrapper"><label for="Multi-Form-11-Country" class="form_field-label">Pays</label><select id="Multi-Form-11-Country" name="Multi-Form-11-Country" data-name="Multi Form 11 Country" class="form_input is-select-input w-select">
+                        <div class="multi-form11_field-wrapper"><label for="Multi-Form-11-Country" class="form_field-label">Région</label><select id="Multi-Form-11-Country" name="Multi-Form-11-Country" data-name="Multi Form 11 Country" class="form_input is-select-input w-select">
                             <option value="">Sélectionnez...</option>
-                            <option value="First">First Choice</option>
-                            <option value="Second">Second Choice</option>
-                            <option value="Third">Third Choice</option>
+                            <option value="Montreal">Montréal</option>
+                            <option value="Quebec">Québec</option>
+                            <option value="Laval">Laval</option>
+                            <option value="Gatineau">Gatineau</option>
+                            <option value="Longueuil">Longueuil</option>
+                            <option value="Sherbrooke">Sherbrooke</option>
+                            <option value="Saguenay">Saguenay</option>
+                            <option value="Levis">Lévis</option>
+                            <option value="Trois-Rivieres">Trois-Rivières</option>
+                            <option value="Terrebonne">Terrebonne</option>
+                            <option value="Other">Autre</option>
                           </select></div>
                         <div class="multi-form11_field-wrapper"><label for="Form-21-Project" class="form_field-label">Date préférée pour le déménagement</label>
                           <div class="multi-form11_input-field"><input class="form_input w-input" maxlength="256" name="Multi-Form-11-Date" data-name="Multi Form 11 Date" placeholder="jj/mm/aa" type="text" id="Multi-Form-11-Date" required="">
