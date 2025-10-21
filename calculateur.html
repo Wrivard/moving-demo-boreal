@@ -22,15 +22,457 @@
   -o-font-smoothing: antialiased;
 }
 
-/* ===== MOVING CALCULATOR FIXES ===== */
+/* ===== MODERN CALCULATOR STYLES ===== */
 
-/* Multi-step form - Fixed visibility */
-[data-form="step"] {
-  display: none !important;
+/* Calculator Section */
+.calculator-section {
+  background: #f8fafc;
+  padding: 60px 0;
 }
 
-[data-form="step"]:first-child {
-  display: block !important;
+.calculator-wrapper {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Header */
+.calculator-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.calculator-title {
+  font-size: 36px;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.calculator-subtitle {
+  font-size: 18px;
+  color: #64748b;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Progress */
+.progress-container {
+  margin-bottom: 40px;
+}
+
+.progress-bar {
+  height: 8px;
+  background: #e2e8f0;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #3b82f6, #1d4ed8);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+  width: 25%;
+}
+
+.progress-text {
+  text-align: center;
+  font-size: 14px;
+  color: #64748b;
+  font-weight: 500;
+}
+
+/* Form Container */
+.form-container {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 40px;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e2e8f0;
+}
+
+/* Form Steps */
+.form-step {
+  display: none;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.form-step.active {
+  display: block;
+}
+
+.step-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 32px;
+  text-align: center;
+  line-height: 1.3;
+}
+
+/* Form Groups */
+.form-group {
+  margin-bottom: 24px;
+}
+
+.form-group:last-child {
+  margin-bottom: 0;
+}
+
+.form-label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+/* Form Inputs */
+.form-input, .form-select, .form-textarea {
+  width: 100%;
+  padding: 12px 16px;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #1f2937;
+  background-color: #ffffff;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.form-input, .form-select {
+  height: 48px;
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.form-input:focus, .form-select:focus, .form-textarea:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.form-input::placeholder, .form-textarea::placeholder {
+  color: #9ca3af;
+}
+
+/* Radio Groups */
+.radio-group {
+  display: grid;
+  gap: 12px;
+}
+
+.radio-option {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  background: #f8fafc;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.radio-option:hover {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+}
+
+.radio-option input[type="radio"] {
+  display: none;
+}
+
+.radio-custom {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #d1d5db;
+  border-radius: 50%;
+  margin-right: 12px;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.radio-option input[type="radio"]:checked + .radio-custom {
+  border-color: #3b82f6;
+  background: #3b82f6;
+}
+
+.radio-option input[type="radio"]:checked + .radio-custom::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ffffff;
+}
+
+.radio-option input[type="radio"]:checked ~ .radio-label {
+  color: #1e293b;
+  font-weight: 500;
+}
+
+.radio-label {
+  color: #374151;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+/* Checkbox Groups */
+.checkbox-group {
+  display: grid;
+  gap: 12px;
+}
+
+.checkbox-option {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  background: #f8fafc;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.checkbox-option:hover {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+}
+
+.checkbox-option input[type="checkbox"] {
+  display: none;
+}
+
+.checkbox-custom {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #d1d5db;
+  border-radius: 4px;
+  margin-right: 12px;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.checkbox-option input[type="checkbox"]:checked + .checkbox-custom {
+  border-color: #3b82f6;
+  background: #3b82f6;
+}
+
+.checkbox-option input[type="checkbox"]:checked + .checkbox-custom::after {
+  content: '✓';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.checkbox-option input[type="checkbox"]:checked ~ .checkbox-label {
+  color: #1e293b;
+  font-weight: 500;
+}
+
+.checkbox-label {
+  color: #374151;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+/* Navigation */
+.form-navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 40px;
+  padding-top: 32px;
+  border-top: 1px solid #e2e8f0;
+}
+
+/* Buttons */
+.btn {
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 120px;
+}
+
+.btn-primary {
+  background: #3b82f6;
+  color: #ffffff;
+}
+
+.btn-primary:hover {
+  background: #2563eb;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.btn-secondary {
+  background: #f1f5f9;
+  color: #475569;
+  border: 1px solid #e2e8f0;
+}
+
+.btn-secondary:hover {
+  background: #e2e8f0;
+  transform: translateY(-1px);
+}
+
+/* Results */
+.results-container {
+  background: #f8fafc;
+  border-radius: 12px;
+  padding: 32px;
+  margin-top: 24px;
+  border: 1px solid #e2e8f0;
+}
+
+.results-content {
+  text-align: center;
+}
+
+.results-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 24px;
+}
+
+.price-display {
+  margin-bottom: 32px;
+}
+
+.price-amount {
+  font-size: 48px;
+  font-weight: 700;
+  color: #3b82f6;
+  display: block;
+}
+
+.price-range {
+  font-size: 24px;
+  font-weight: 600;
+  color: #64748b;
+}
+
+.price-breakdown {
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 24px;
+  margin-bottom: 24px;
+  text-align: left;
+  border: 1px solid #e2e8f0;
+}
+
+.breakdown-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.breakdown-item:last-child {
+  border-bottom: none;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.breakdown-label {
+  color: #64748b;
+}
+
+.breakdown-value {
+  color: #1e293b;
+  font-weight: 500;
+}
+
+.results-footer {
+  text-align: center;
+}
+
+.results-footer p {
+  color: #64748b;
+  margin-bottom: 16px;
+  line-height: 1.5;
+}
+
+/* Flatpickr Styling */
+.flatpickr-calendar {
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 12px !important;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1) !important;
+  color: #1f2937 !important;
+}
+
+.flatpickr-day.selected {
+  background: #3b82f6 !important;
+  color: #ffffff !important;
+  border-color: #3b82f6 !important;
+}
+
+.flatpickr-day.today {
+  border-color: #3b82f6 !important;
+  color: #3b82f6 !important;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .calculator-wrapper {
+    padding: 0 16px;
+  }
+  
+  .form-container {
+    padding: 24px;
+  }
+  
+  .calculator-title {
+    font-size: 28px;
+  }
+  
+  .calculator-subtitle {
+    font-size: 16px;
+  }
+  
+  .step-title {
+    font-size: 20px;
+  }
+  
+  .form-navigation {
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .btn {
+    width: 100%;
+  }
+  
+  .price-amount {
+    font-size: 36px;
+  }
+  
+  .price-range {
+    font-size: 20px;
+  }
 }
 
 /* Progress bar - Blue theme */
@@ -1283,55 +1725,48 @@ margin: 0rem !important;
           <div class="image-overlay-layer"></div><img sizes="(max-width: 1500px) 100vw, 1500px" srcset="images/relume-481892.jpeg 500w, images/relume-481892.jpeg 800w, images/relume-481892.jpeg 1080w, images/relume-481892.jpeg 1500w" alt="" src="images/relume-481892.jpeg" loading="eager" class="header50_background-image">
         </div>
       </header>
-      <section id="calculator" class="section_multi-form11 color-scheme-2">
+      <section id="calculator" class="calculator-section">
         <div class="padding-global">
           <div class="container-large">
-            <div class="multi-form11_wrapper">
-              <div class="multi-form11_header">
-                <h2 class="heading-style-h2">Calculateur de déménagement</h2>
-                <p class="text-size-large">Obtenez une estimation personnalisée en quelques minutes</p>
+            <div class="calculator-wrapper">
+              <div class="calculator-header">
+                <h2 class="calculator-title">Calculateur de déménagement</h2>
+                <p class="calculator-subtitle">Obtenez une estimation personnalisée en quelques minutes</p>
               </div>
-              <div class="multi-form11_progress-wrapper">
-                <div class="multi-form11_progress">
-                  <div class="multi-form11_progress-bar"></div>
+              
+              <div class="progress-container">
+                <div class="progress-bar">
+                  <div class="progress-fill" id="progress-fill"></div>
                 </div>
-                <div class="multi-form11_progress-text">Étape <span id="current-step">1</span> sur 5</div>
+                <div class="progress-text">Étape <span id="current-step">1</span> sur 4</div>
               </div>
-              <div class="multi-form11_form-wrapper">
-                <form id="moving-calculator-form" class="multi-form11_form w-form">
-                  <div data-form="step" class="multi-form11_form-step">
-                    <h3 class="heading-style-h3">Informations personnelles</h3>
-                    <div class="multi-form11_form-field">
-                      <label for="Multi-Form-11-Name" class="field-label">Nom complet *</label>
-                      <input type="text" class="form_input w-input" maxlength="256" name="Multi-Form-11-Name" data-name="Multi-Form-11-Name" placeholder="Votre nom complet" id="Multi-Form-11-Name" required="">
+
+              <div class="form-container">
+                <form id="moving-calculator-form" class="calculator-form">
+                  
+                  <!-- Step 1: Personal Info -->
+                  <div class="form-step active" data-step="1">
+                    <h3 class="step-title">Informations personnelles</h3>
+                    <div class="form-group">
+                      <label for="name" class="form-label">Nom complet *</label>
+                      <input type="text" id="name" name="name" class="form-input" placeholder="Votre nom complet" required>
                     </div>
-                    <div class="multi-form11_form-field">
-                      <label for="Multi-Form-11-Email" class="field-label">Adresse e-mail *</label>
-                      <input type="email" class="form_input w-input" maxlength="256" name="Multi-Form-11-Email" data-name="Multi-Form-11-Email" placeholder="votre@email.com" id="Multi-Form-11-Email" required="">
+                    <div class="form-group">
+                      <label for="email" class="form-label">Adresse e-mail *</label>
+                      <input type="email" id="email" name="email" class="form-input" placeholder="votre@email.com" required>
                     </div>
-                    <div class="multi-form11_form-field">
-                      <label for="Multi-Form-11-Phone" class="field-label">Numéro de téléphone</label>
-                      <input type="tel" class="form_input w-input" maxlength="256" name="Multi-Form-11-Phone" data-name="Multi-Form-11-Phone" placeholder="(514) 123-4567" id="Multi-Form-11-Phone">
-                    </div>
-                  </div>
-                  <div data-form="step" class="multi-form11_form-step">
-                    <h3 class="heading-style-h3">Type de service</h3>
-                    <div class="multi-form11_form-field">
-                      <label class="form_radio w-radio" data-wf-field="Multi-Form-11-Service">
-                        <input type="radio" name="Multi-Form-11-Service" value="residential" data-name="Multi-Form-11-Service" id="Multi-Form-11-Service-residential">
-                        <span class="w-form-label" for="Multi-Form-11-Service-residential">Déménagement résidentiel</span>
-                      </label>
-                      <label class="form_radio w-radio" data-wf-field="Multi-Form-11-Service">
-                        <input type="radio" name="Multi-Form-11-Service" value="commercial" data-name="Multi-Form-11-Service" id="Multi-Form-11-Service-commercial">
-                        <span class="w-form-label" for="Multi-Form-11-Service-commercial">Déménagement commercial</span>
-                      </label>
+                    <div class="form-group">
+                      <label for="phone" class="form-label">Numéro de téléphone</label>
+                      <input type="tel" id="phone" name="phone" class="form-input" placeholder="(514) 123-4567">
                     </div>
                   </div>
-                  <div data-form="step" class="multi-form11_form-step">
-                    <h3 class="heading-style-h3">Détails du déménagement</h3>
-                    <div class="multi-form11_form-field">
-                      <label for="Multi-Form-11-Residence" class="field-label">Type de résidence</label>
-                      <select class="form_select w-select" name="Multi-Form-11-Residence" data-name="Multi-Form-11-Residence" id="Multi-Form-11-Residence">
+
+                  <!-- Step 2: Moving Details -->
+                  <div class="form-step" data-step="2">
+                    <h3 class="step-title">Détails du déménagement</h3>
+                    <div class="form-group">
+                      <label for="residence" class="form-label">Type de résidence *</label>
+                      <select id="residence" name="residence" class="form-select" required>
                         <option value="">Sélectionner un type</option>
                         <option value="studio">Studio</option>
                         <option value="1-bedroom">1 chambre</option>
@@ -1343,125 +1778,127 @@ margin: 0rem !important;
                         <option value="house-large">Maison (grande)</option>
                       </select>
                     </div>
-                    <div class="multi-form11_form-field">
-                      <label for="Multi-Form-11-People" class="field-label">Nombre de personnes</label>
-                      <input type="number" class="form_input w-input" name="Multi-Form-11-People" data-name="Multi-Form-11-People" placeholder="2" id="Multi-Form-11-People" min="1" max="20">
+                    <div class="form-group">
+                      <label for="distance" class="form-label">Distance (km) *</label>
+                      <input type="number" id="distance" name="distance" class="form-input" placeholder="25" min="0" max="1000" required>
                     </div>
-                    <div class="multi-form11_form-field">
-                      <label for="Multi-Form-11-Address" class="field-label">Adresse actuelle</label>
-                      <input type="text" class="form_input w-input" maxlength="256" name="Multi-Form-11-Address" data-name="Multi-Form-11-Address" placeholder="123 Rue Example, Montréal, QC" id="Multi-Form-11-Address">
-                    </div>
-                    <div class="multi-form11_form-field">
-                      <label for="Multi-Form-11-Destination" class="field-label">Région de destination</label>
-                      <select class="form_select w-select" name="Multi-Form-11-Destination" data-name="Multi-Form-11-Destination" id="Multi-Form-11-Destination">
-                        <option value="">Sélectionner une région</option>
-                        <option value="montreal">Montréal</option>
-                        <option value="laval">Laval</option>
-                        <option value="longueuil">Longueuil</option>
-                        <option value="gatineau">Gatineau</option>
-                        <option value="quebec">Québec</option>
-                        <option value="sherbrooke">Sherbrooke</option>
-                        <option value="trois-rivieres">Trois-Rivières</option>
-                        <option value="saguenay">Saguenay</option>
-                        <option value="other">Autre</option>
-                      </select>
-                    </div>
-                    <div class="multi-form11_form-field">
-                      <label for="Multi-Form-11-Distance" class="field-label">Distance de déménagement (km)</label>
-                      <input type="number" class="form_input w-input" name="Multi-Form-11-Distance" data-name="Multi-Form-11-Distance" placeholder="25" id="Multi-Form-11-Distance" min="0" max="1000">
-                    </div>
-                  </div>
-                  <div data-form="step" class="multi-form11_form-step">
-                    <h3 class="heading-style-h3">Services additionnels</h3>
-                    <div class="multi-form11_form-field">
-                      <label class="form_checkbox w-checkbox" data-wf-field="Multi-Form-11-Services">
-                        <input type="checkbox" name="Multi-Form-11-Services" value="packing" data-name="Multi-Form-11-Services" id="Multi-Form-11-Services-packing">
-                        <span class="w-form-label" for="Multi-Form-11-Services-packing">Emballage professionnel</span>
-                      </label>
-                      <label class="form_checkbox w-checkbox" data-wf-field="Multi-Form-11-Services">
-                        <input type="checkbox" name="Multi-Form-11-Services" value="assembly" data-name="Multi-Form-11-Services" id="Multi-Form-11-Services-assembly">
-                        <span class="w-form-label" for="Multi-Form-11-Services-assembly">Montage/Démontage meubles</span>
-                      </label>
-                      <label class="form_checkbox w-checkbox" data-wf-field="Multi-Form-11-Services">
-                        <input type="checkbox" name="Multi-Form-11-Services" value="cleaning" data-name="Multi-Form-11-Services" id="Multi-Form-11-Services-cleaning">
-                        <span class="w-form-label" for="Multi-Form-11-Services-cleaning">Nettoyage final</span>
-                      </label>
-                      <label class="form_checkbox w-checkbox" data-wf-field="Multi-Form-11-Services">
-                        <input type="checkbox" name="Multi-Form-11-Services" value="storage" data-name="Multi-Form-11-Services" id="Multi-Form-11-Services-storage">
-                        <span class="w-form-label" for="Multi-Form-11-Services-storage">Entreposage temporaire</span>
-                      </label>
-                    </div>
-                    <h3 class="heading-style-h3">Articles complexes et spéciaux</h3>
-                    <div class="multi-form11_form-field">
-                      <label class="form_checkbox w-checkbox" data-wf-field="Multi-Form-11-Complex">
-                        <input type="checkbox" name="Multi-Form-11-Complex" value="piano" data-name="Multi-Form-11-Complex" id="Multi-Form-11-Complex-piano">
-                        <span class="w-form-label" for="Multi-Form-11-Complex-piano">Piano</span>
-                      </label>
-                      <label class="form_checkbox w-checkbox" data-wf-field="Multi-Form-11-Complex">
-                        <input type="checkbox" name="Multi-Form-11-Complex" value="pool-table" data-name="Multi-Form-11-Complex" id="Multi-Form-11-Complex-pool-table">
-                        <span class="w-form-label" for="Multi-Form-11-Complex-pool-table">Table de billard</span>
-                      </label>
-                      <label class="form_checkbox w-checkbox" data-wf-field="Multi-Form-11-Complex">
-                        <input type="checkbox" name="Multi-Form-11-Complex" value="antiques" data-name="Multi-Form-11-Complex" id="Multi-Form-11-Complex-antiques">
-                        <span class="w-form-label" for="Multi-Form-11-Complex-antiques">Antiquités/Art</span>
-                      </label>
-                      <label class="form_checkbox w-checkbox" data-wf-field="Multi-Form-11-Complex">
-                        <input type="checkbox" name="Multi-Form-11-Complex" value="appliances" data-name="Multi-Form-11-Complex" id="Multi-Form-11-Complex-appliances">
-                        <span class="w-form-label" for="Multi-Form-11-Complex-appliances">Électroménagers lourds</span>
-                      </label>
-                      <label class="form_checkbox w-checkbox" data-wf-field="Multi-Form-11-Complex">
-                        <input type="checkbox" name="Multi-Form-11-Complex" value="garden" data-name="Multi-Form-11-Complex" id="Multi-Form-11-Complex-garden">
-                        <span class="w-form-label" for="Multi-Form-11-Complex-garden">Équipement de jardin</span>
-                      </label>
-                      <label class="form_checkbox w-checkbox" data-wf-field="Multi-Form-11-Complex">
-                        <input type="checkbox" name="Multi-Form-11-Complex" value="none" data-name="Multi-Form-11-Complex" id="Multi-Form-11-Complex-none">
-                        <span class="w-form-label" for="Multi-Form-11-Complex-none">Aucun article complexe</span>
-                      </label>
-                    </div>
-                    <h3 class="heading-style-h3">Étages (sans ascenseur)</h3>
-                    <div class="multi-form11_form-field">
-                      <label class="form_radio w-radio" data-wf-field="Multi-Form-11-Floors">
-                        <input type="radio" name="Multi-Form-11-Floors" value="0" data-name="Multi-Form-11-Floors" id="Multi-Form-11-Floors-0">
-                        <span class="w-form-label" for="Multi-Form-11-Floors-0">Rez-de-chaussée</span>
-                      </label>
-                      <label class="form_radio w-radio" data-wf-field="Multi-Form-11-Floors">
-                        <input type="radio" name="Multi-Form-11-Floors" value="1" data-name="Multi-Form-11-Floors" id="Multi-Form-11-Floors-1">
-                        <span class="w-form-label" for="Multi-Form-11-Floors-1">1 étage</span>
-                      </label>
-                      <label class="form_radio w-radio" data-wf-field="Multi-Form-11-Floors">
-                        <input type="radio" name="Multi-Form-11-Floors" value="2" data-name="Multi-Form-11-Floors" id="Multi-Form-11-Floors-2">
-                        <span class="w-form-label" for="Multi-Form-11-Floors-2">2 étages</span>
-                      </label>
-                      <label class="form_radio w-radio" data-wf-field="Multi-Form-11-Floors">
-                        <input type="radio" name="Multi-Form-11-Floors" value="3" data-name="Multi-Form-11-Floors" id="Multi-Form-11-Floors-3">
-                        <span class="w-form-label" for="Multi-Form-11-Floors-3">3+ étages</span>
-                      </label>
+                    <div class="form-group">
+                      <label class="form-label">Étages (sans ascenseur) *</label>
+                      <div class="radio-group">
+                        <label class="radio-option">
+                          <input type="radio" name="floors" value="0" required>
+                          <span class="radio-custom"></span>
+                          <span class="radio-label">Rez-de-chaussée</span>
+                        </label>
+                        <label class="radio-option">
+                          <input type="radio" name="floors" value="1" required>
+                          <span class="radio-custom"></span>
+                          <span class="radio-label">1 étage</span>
+                        </label>
+                        <label class="radio-option">
+                          <input type="radio" name="floors" value="2" required>
+                          <span class="radio-custom"></span>
+                          <span class="radio-label">2 étages</span>
+                        </label>
+                        <label class="radio-option">
+                          <input type="radio" name="floors" value="3" required>
+                          <span class="radio-custom"></span>
+                          <span class="radio-label">3+ étages</span>
+                        </label>
+                      </div>
                     </div>
                   </div>
-                  <div data-form="step" class="multi-form11_form-step">
-                    <h3 class="heading-style-h3">Date prévue du déménagement</h3>
-                    <div class="multi-form11_form-field">
-                      <label for="Multi-Form-11-Date" class="field-label">Date de déménagement prévue *</label>
-                      <input class="date-picker-input" type="text" name="Multi-Form-11-Date" id="Multi-Form-11-Date" placeholder="Sélectionner une date" required="" readonly="">
+
+                  <!-- Step 3: Services -->
+                  <div class="form-step" data-step="3">
+                    <h3 class="step-title">Services additionnels</h3>
+                    <div class="form-group">
+                      <label class="form-label">Services souhaités</label>
+                      <div class="checkbox-group">
+                        <label class="checkbox-option">
+                          <input type="checkbox" name="services" value="packing">
+                          <span class="checkbox-custom"></span>
+                          <span class="checkbox-label">Emballage professionnel (+200$)</span>
+                        </label>
+                        <label class="checkbox-option">
+                          <input type="checkbox" name="services" value="assembly">
+                          <span class="checkbox-custom"></span>
+                          <span class="checkbox-label">Montage/Démontage meubles (+150$)</span>
+                        </label>
+                        <label class="checkbox-option">
+                          <input type="checkbox" name="services" value="cleaning">
+                          <span class="checkbox-custom"></span>
+                          <span class="checkbox-label">Nettoyage final (+100$)</span>
+                        </label>
+                        <label class="checkbox-option">
+                          <input type="checkbox" name="services" value="storage">
+                          <span class="checkbox-custom"></span>
+                          <span class="checkbox-label">Entreposage temporaire (+300$)</span>
+                        </label>
+                      </div>
                     </div>
-                    <div class="multi-form11_form-field">
-                      <label for="Multi-Form-11-Details" class="field-label">Détails du déménagement</label>
-                      <textarea class="form_input w-input" maxlength="5000" name="Multi-Form-11-Details" data-name="Multi-Form-11-Details" placeholder="Décrivez votre déménagement, besoins spéciaux, etc." id="Multi-Form-11-Details"></textarea>
+                    <div class="form-group">
+                      <label class="form-label">Articles complexes</label>
+                      <div class="checkbox-group">
+                        <label class="checkbox-option">
+                          <input type="checkbox" name="complex" value="piano">
+                          <span class="checkbox-custom"></span>
+                          <span class="checkbox-label">Piano (+200$)</span>
+                        </label>
+                        <label class="checkbox-option">
+                          <input type="checkbox" name="complex" value="pool-table">
+                          <span class="checkbox-custom"></span>
+                          <span class="checkbox-label">Table de billard (+150$)</span>
+                        </label>
+                        <label class="checkbox-option">
+                          <input type="checkbox" name="complex" value="antiques">
+                          <span class="checkbox-custom"></span>
+                          <span class="checkbox-label">Antiquités/Art (+100$)</span>
+                        </label>
+                        <label class="checkbox-option">
+                          <input type="checkbox" name="complex" value="appliances">
+                          <span class="checkbox-custom"></span>
+                          <span class="checkbox-label">Électroménagers lourds (+75$)</span>
+                        </label>
+                      </div>
                     </div>
                   </div>
-                  <div class="multi-form11_form-navigation">
-                    <button type="button" id="prev-btn" class="button w-button" style="display: none;">Précédent</button>
-                    <button type="button" id="next-btn" class="button w-button">Suivant</button>
-                    <button type="submit" id="submit-btn" class="button w-button" style="display: none;">Obtenir mon estimation</button>
-                  </div>
-                  <div class="form_message-success-wrapper w-form-done" style="display: none;">
-                    <div class="form_message-success">
-                      <!-- Success message will be inserted here -->
+
+                  <!-- Step 4: Date & Submit -->
+                  <div class="form-step" data-step="4">
+                    <h3 class="step-title">Date de déménagement</h3>
+                    <div class="form-group">
+                      <label for="date" class="form-label">Date prévue *</label>
+                      <input type="text" id="date" name="date" class="form-input date-input" placeholder="Sélectionner une date" required readonly>
+                    </div>
+                    <div class="form-group">
+                      <label for="details" class="form-label">Détails supplémentaires</label>
+                      <textarea id="details" name="details" class="form-textarea" placeholder="Décrivez votre déménagement, besoins spéciaux, etc." rows="4"></textarea>
                     </div>
                   </div>
-                  <div class="form_message-error-wrapper w-form-fail" style="display: none;">
-                    <div class="form_message-error">
-                      <div class="error-text">Erreur lors de l'envoi. Veuillez réessayer.</div>
+
+                  <!-- Navigation -->
+                  <div class="form-navigation">
+                    <button type="button" id="prev-btn" class="btn btn-secondary" style="display: none;">Précédent</button>
+                    <button type="button" id="next-btn" class="btn btn-primary">Suivant</button>
+                    <button type="submit" id="submit-btn" class="btn btn-primary" style="display: none;">Obtenir mon estimation</button>
+                  </div>
+
+                  <!-- Results -->
+                  <div id="results" class="results-container" style="display: none;">
+                    <div class="results-content">
+                      <h3 class="results-title">Votre estimation</h3>
+                      <div class="price-display">
+                        <span class="price-amount" id="price-amount">$0</span>
+                        <span class="price-range" id="price-range">- $0</span>
+                      </div>
+                      <div class="price-breakdown" id="price-breakdown">
+                        <!-- Breakdown will be populated here -->
+                      </div>
+                      <div class="results-footer">
+                        <p>Un expert vous contactera dans les 48h pour confirmer votre estimation.</p>
+                        <button type="button" class="btn btn-secondary" onclick="resetForm()">Nouvelle estimation</button>
+                      </div>
                     </div>
                   </div>
                 </form>
@@ -1935,16 +2372,16 @@ margin: 0rem !important;
   
   <!-- Calculator JavaScript -->
   <script>
-    // Multi-step form functionality
+    // Modern multi-step form functionality
     let currentStep = 0;
-    const totalSteps = 5;
+    const totalSteps = 4;
 
-    function initMultiStepForm() {
+    function initCalculator() {
       showStep(0);
       updateProgress();
       
       // Initialize Flatpickr
-      flatpickr("#Multi-Form-11-Date", {
+      flatpickr("#date", {
         dateFormat: "d/m/Y",
         locale: "fr",
         allowInput: false,
@@ -1954,9 +2391,9 @@ margin: 0rem !important;
     }
 
     function showStep(stepNumber) {
-      const steps = document.querySelectorAll('[data-form="step"]');
+      const steps = document.querySelectorAll('.form-step');
       steps.forEach((step, index) => {
-        step.style.display = index === stepNumber ? 'block' : 'none';
+        step.classList.toggle('active', index === stepNumber);
       });
       
       // Update navigation buttons
@@ -1986,16 +2423,16 @@ margin: 0rem !important;
     }
 
     function updateProgress() {
-      const progressBar = document.querySelector('.multi-form11_progress-bar');
+      const progressFill = document.getElementById('progress-fill');
       const currentStepElement = document.getElementById('current-step');
       const progress = ((currentStep + 1) / totalSteps) * 100;
       
-      progressBar.style.width = progress + '%';
+      progressFill.style.width = progress + '%';
       currentStepElement.textContent = currentStep + 1;
     }
 
     function validateCurrentStep() {
-      const currentStepElement = document.querySelectorAll('[data-form="step"]')[currentStep];
+      const currentStepElement = document.querySelectorAll('.form-step')[currentStep];
       const requiredFields = currentStepElement.querySelectorAll('[required]');
       
       for (let field of requiredFields) {
@@ -2173,7 +2610,7 @@ margin: 0rem !important;
     }
 
     // Initialize when page loads
-    document.addEventListener('DOMContentLoaded', initMultiStepForm);
+    document.addEventListener('DOMContentLoaded', initCalculator);
   </script>
 </body>
 </html>
