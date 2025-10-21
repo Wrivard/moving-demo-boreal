@@ -22,44 +22,143 @@
   -o-font-smoothing: antialiased;
 }
 
-/* Fix radio buttons - make them visible and functional */
-input[type="radio"] {
-  opacity: 1 !important;
-  position: relative !important;
-  z-index: 1 !important;
-  margin-right: 8px;
-  width: 16px;
-  height: 16px;
+/* ===== MOVING CALCULATOR FIXES ===== */
+
+/* Multi-step form */
+[data-form="step"] {
+  display: none !important;
 }
 
-/* Style radio button labels to be clickable */
+[data-form="step"]:first-child {
+  display: block !important;
+}
+
+/* Progress bar */
+.multi-form11_progress-bar {
+  background-color: #f58220 !important;
+}
+
+.multi-form11_progress {
+  background-color: #555 !important;
+}
+
+/* Input fields */
+.form_input {
+  color: #ffffff !important;
+  background-color: #2a2a2a !important;
+  border: 1px solid #555 !important;
+  border-radius: 6px !important;
+  padding: 8px 12px !important;
+  font-size: 14px !important;
+  height: 40px !important;
+  transition: all 0.2s ease !important;
+}
+
+.form_input:focus {
+  outline: none !important;
+  border-color: #f58220 !important;
+  box-shadow: 0 0 0 2px rgba(245, 130, 32, 0.2) !important;
+}
+
+.form_input::placeholder {
+  color: #888 !important;
+}
+
+/* Email input icon spacing */
+.form_input[type="email"] {
+  padding-left: 45px !important;
+}
+
+/* Select dropdowns */
+.form_select, .w-select {
+  color: #ffffff !important;
+  background-color: #2a2a2a !important;
+  border: 1px solid #555 !important;
+  border-radius: 6px !important;
+  padding: 8px 12px !important;
+  font-size: 14px !important;
+  height: 40px !important;
+}
+
+.form_select option, .w-select option {
+  background-color: #2a2a2a !important;
+  color: #ffffff !important;
+  padding: 8px !important;
+}
+
+/* Radio buttons - Complete fix */
 .form_radio-btn, .form_checkbox-btn {
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  padding: 8px 12px;
-  margin: 4px 0;
-  border: 2px solid #e0e0e0;
-  border-radius: 8px;
-  transition: all 0.3s ease;
+  position: relative !important;
+  cursor: pointer !important;
+  margin-bottom: 12px !important;
+  display: flex !important;
+  align-items: center !important;
+  padding: 8px 12px !important;
+  border: 2px solid #555 !important;
+  border-radius: 8px !important;
+  transition: all 0.3s ease !important;
 }
 
 .form_radio-btn:hover, .form_checkbox-btn:hover {
-  border-color: #007bff;
-  background-color: #f8f9fa;
+  border-color: #777 !important;
+  background-color: #333 !important;
 }
 
-/* Style selected radio buttons */
-input[type="radio"]:checked + .form_radio-btn-label,
-input[type="radio"]:checked ~ .form_radio-btn-label {
-  color: #007bff;
-  font-weight: bold;
+.form_radio-btn input[type="radio"], .form_checkbox-btn input[type="radio"] {
+  position: absolute !important;
+  opacity: 0 !important;
+  cursor: pointer !important;
+  margin: 0 !important;
+  width: 16px !important;
+  height: 16px !important;
 }
 
+.form_radio-btn .w-form-label, .form_checkbox-btn .w-form-label {
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  color: #ffffff !important;
+  font-size: 14px !important;
+  line-height: 1.5 !important;
+  margin: 0 !important;
+}
+
+.form_radio-btn .w-form-label::before, .form_checkbox-btn .w-form-label::before {
+  content: '' !important;
+  width: 16px !important;
+  height: 16px !important;
+  border: 2px solid #555 !important;
+  border-radius: 50% !important;
+  background: transparent !important;
+  margin-right: 8px !important;
+  transition: all 0.2s ease !important;
+}
+
+.form_radio-btn input[type="radio"]:checked + .w-form-label::before,
+.form_checkbox-btn input[type="radio"]:checked + .w-form-label::before {
+  border-color: #f58220 !important;
+  background: #f58220 !important;
+}
+
+.form_radio-btn input[type="radio"]:checked + .w-form-label::after,
+.form_checkbox-btn input[type="radio"]:checked + .w-form-label::after {
+  content: '' !important;
+  position: absolute !important;
+  left: 4px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  width: 6px !important;
+  height: 6px !important;
+  border-radius: 50% !important;
+  background: #ffffff !important;
+}
+
+/* Selected state styling */
 .form_radio-btn:has(input[type="radio"]:checked),
 .form_checkbox-btn:has(input[type="radio"]:checked) {
-  border-color: #007bff;
-  background-color: #e3f2fd;
+  border-color: #f58220 !important;
+  background-color: rgba(245, 130, 32, 0.1) !important;
 }
 
 /* Hide the custom Webflow radio button icons */
@@ -69,22 +168,186 @@ input[type="radio"]:checked ~ .form_radio-btn-label {
 
 /* Style the letter indicators */
 .form_radio-btn-letter {
-  background: #f0f0f0;
-  border-radius: 50%;
-  width: 24px;
-  height: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-right: 12px;
-  font-weight: bold;
-  font-size: 12px;
+  background: #555 !important;
+  border-radius: 50% !important;
+  width: 24px !important;
+  height: 24px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin-right: 12px !important;
+  font-weight: bold !important;
+  font-size: 12px !important;
+  color: #ffffff !important;
 }
 
 .form_radio-btn:has(input[type="radio"]:checked) .form_radio-btn-letter,
 .form_checkbox-btn:has(input[type="radio"]:checked) .form_radio-btn-letter {
-  background: #007bff;
-  color: white;
+  background: #f58220 !important;
+  color: #ffffff !important;
+}
+
+/* Buttons */
+.button {
+  background-color: #f58220 !important;
+  color: #ffffff !important;
+  border: none !important;
+  border-radius: 6px !important;
+  padding: 12px 24px !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+}
+
+.button:hover {
+  background-color: #e6731a !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 12px rgba(245, 130, 32, 0.3) !important;
+}
+
+.button.is-secondary {
+  background-color: transparent !important;
+  color: #ffffff !important;
+  border: 2px solid #555 !important;
+}
+
+.button.is-secondary:hover {
+  background-color: #555 !important;
+  border-color: #777 !important;
+}
+
+/* Navigation */
+.navbar3_link.w-nav-link.w--current {
+  color: #ffffff !important;
+}
+
+/* Quote display */
+.form_message-success-wrapper {
+  background-color: #1a1a1a !important;
+  color: #ffffff !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: none !important;
+  border-radius: 0 !important;
+}
+
+.form_message-success {
+  background-color: #1a1a1a !important;
+  color: #ffffff !important;
+  padding: 40px !important;
+  margin: 20px 0 !important;
+  border-radius: 8px !important;
+  text-align: left !important;
+}
+
+.form_message-success h3,
+.form_message-success h4 {
+  text-align: left !important;
+  color: #ffffff !important;
+}
+
+.form_message-success p {
+  text-align: left !important;
+  color: #ffffff !important;
+}
+
+/* Hide error messages for demo */
+.form_message-error-wrapper {
+  display: none !important;
+}
+
+/* Date picker */
+.date-picker-input {
+  width: 100% !important;
+  padding: 8px 12px !important;
+  background-color: #2a2a2a !important;
+  border: 1px solid #555 !important;
+  border-radius: 6px !important;
+  color: #ffffff !important;
+  font-size: 14px !important;
+  height: 40px !important;
+  transition: all 0.2s ease !important;
+  cursor: pointer !important;
+}
+
+.date-picker-input:focus {
+  outline: none !important;
+  border-color: #f58220 !important;
+  box-shadow: 0 0 0 2px rgba(245, 130, 32, 0.2) !important;
+}
+
+.date-picker-input:hover {
+  border-color: #777 !important;
+}
+
+.date-picker-input::placeholder {
+  color: #888 !important;
+}
+
+/* Flatpickr dark theme */
+.flatpickr-calendar {
+  background: #1a1a1a !important;
+  border: 1px solid #555 !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3) !important;
+  color: #ffffff !important;
+}
+
+.flatpickr-months {
+  background: #2a2a2a !important;
+  border-radius: 8px 8px 0 0 !important;
+  padding: 10px !important;
+}
+
+.flatpickr-day.selected {
+  background: #f58220 !important;
+  color: #ffffff !important;
+  border-color: #f58220 !important;
+}
+
+.flatpickr-day.today {
+  border-color: #f58220 !important;
+  color: #f58220 !important;
+}
+
+/* Form field labels */
+.form_field-label {
+  color: #ffffff !important;
+  font-weight: 500 !important;
+  margin-bottom: 8px !important;
+  display: block !important;
+}
+
+/* Multi-form specific styling */
+.multi-form11_form-content {
+  background-color: transparent !important;
+}
+
+.multi-form11_field-wrapper {
+  margin-bottom: 20px !important;
+}
+
+.multi-form11_radio-group {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+}
+
+/* Step tag styling */
+.multi-form11_step-tag {
+  color: #ffffff !important;
+  font-weight: 500 !important;
+}
+
+/* Instructions card */
+.formly-multi-step-form-instructions-card {
+  background-color: #2a2a2a !important;
+  color: #ffffff !important;
+  padding: 20px !important;
+  border-radius: 8px !important;
+  border: 1px solid #555 !important;
+  margin-bottom: 30px !important;
 }
 </style>
 </head>
@@ -356,9 +619,9 @@ margin: 0rem !important;
           </div>
         </div>
         <nav role="navigation" class="navbar3_menu w-nav-menu">
-          <a href="#" class="navbar3_logo-link-menu w-nav-brand"><img loading="eager" src="images/Logo-wide.svg" alt="" class="navbar3_logo"></a>
+          <a href="index.html" class="navbar3_logo-link-menu w-nav-brand"><img loading="eager" src="images/Logo-wide.svg" alt="" class="navbar3_logo"></a>
           <a href="index.html" class="navbar3_link w-nav-link">Accueil</a>
-          <a href="#" class="navbar3_link w-nav-link">À Propos</a>
+          <a href="index.html#about" class="navbar3_link w-nav-link">À Propos</a>
           <div data-delay="200" data-hover="true" class="navbar3_menu-dropdown w-dropdown">
             <div class="navbar3_dropdown-toggle w-dropdown-toggle">
               <div>Services</div>
@@ -367,12 +630,12 @@ margin: 0rem !important;
                 </svg></div>
             </div>
             <nav class="navbar3_dropdown-list w-dropdown-list">
-              <a href="#" class="navbar3_dropdown-link w-dropdown-link">Déménagement résidentiel</a>
-              <a href="#" class="navbar3_dropdown-link w-dropdown-link">Emballage et entreposage</a>
+              <a href="index.html#services" class="navbar3_dropdown-link w-dropdown-link">Déménagement résidentiel</a>
+              <a href="index.html#services" class="navbar3_dropdown-link w-dropdown-link">Emballage et entreposage</a>
             </nav>
           </div>
           <a href="calculateur.html" aria-current="page" class="navbar3_link w-nav-link w--current">Calculateur</a>
-          <a href="#" class="navbar3_tablet-menu-button w-button">Soumission</a>
+          <a href="soumission-contact-2.html" class="navbar3_tablet-menu-button w-button">Soumission</a>
         </nav>
         <a href="index.html" class="navbar3_logo-link w-nav-brand"><img width="101" loading="lazy" alt="" src="images/relume-481781.png" class="navbar3_logo"></a>
         <a id="w-node-ea4367e6-6667-b60e-7c46-274212abaef3-12abaed5" href="soumission-contact-2.html" class="button w-button">Soumission</a>
@@ -395,8 +658,8 @@ margin: 0rem !important;
                   <p class="text-size-medium">Obtenez une estimation précise et rapide de votre déménagement avec notre outil en ligne facile à utiliser</p>
                   <div class="margin-top margin-medium">
                     <div class="button-group">
-                      <a href="#" class="button w-button">Commencer</a>
-                      <a href="#" class="button is-secondary is-alternate w-button">Contactez-nous</a>
+                      <a href="#calculator" class="button w-button">Commencer</a>
+                      <a href="soumission-contact-2.html" class="button is-secondary is-alternate w-button">Contactez-nous</a>
                     </div>
                   </div>
                 </div>
@@ -408,7 +671,7 @@ margin: 0rem !important;
           <div class="image-overlay-layer"></div><img sizes="(max-width: 1500px) 100vw, 1500px" srcset="images/relume-481892.jpeg 500w, images/relume-481892.jpeg 800w, images/relume-481892.jpeg 1080w, images/relume-481892.jpeg 1500w" alt="" src="images/relume-481892.jpeg" loading="eager" class="header50_background-image">
         </div>
       </header>
-      <section class="section_multi-form11 color-scheme-2">
+      <section id="calculator" class="section_multi-form11 color-scheme-2">
         <div class="multi-step-form-instructions-delete">
           <div class="container-small">
             <div class="formly-multi-step-form-instructions-card">
@@ -918,7 +1181,7 @@ margin: 0rem !important;
                             <div class="margin-bottom margin-xxsmall">
                               <h3 class="heading-style-h6">Courriel</h3>
                             </div>
-                            <a href="#" class="text-style-link">info@demenagementboreal.com</a>
+                            <a href="mailto:info@demenagementboreal.com" class="text-style-link">info@demenagementboreal.com</a>
                           </div>
                         </div>
                         <div id="w-node-_75b97126-c943-0913-ef67-c2f893fb2ec8-93fb2eac" class="contact16_item">
@@ -931,7 +1194,7 @@ margin: 0rem !important;
                             <div class="margin-bottom margin-xxsmall">
                               <h3 class="heading-style-h6">Téléphone</h3>
                             </div>
-                            <a href="#" class="text-style-link">418 555-7890</a>
+                            <a href="tel:+14185557890" class="text-style-link">418 555-7890</a>
                           </div>
                         </div>
                         <div id="w-node-_75b97126-c943-0913-ef67-c2f893fb2ed1-93fb2eac" class="contact16_item">
@@ -1015,18 +1278,18 @@ margin: 0rem !important;
                 </div>
                 <div class="w-layout-grid footer3_menu-wrapper">
                   <div class="footer3_link-list">
-                    <a href="#" class="footer3_link">Accueil</a>
-                    <a href="#" class="footer3_link">Services</a>
-                    <a href="#" class="footer3_link">Témoignages</a>
-                    <a href="#" class="footer3_link">Contact</a>
-                    <a href="#" class="footer3_link">Soumission</a>
+                    <a href="index.html" class="footer3_link">Accueil</a>
+                    <a href="index.html#services" class="footer3_link">Services</a>
+                    <a href="index.html#testimonials" class="footer3_link">Témoignages</a>
+                    <a href="soumission-contact-2.html" class="footer3_link">Contact</a>
+                    <a href="soumission-contact-2.html" class="footer3_link">Soumission</a>
                   </div>
                   <div class="footer3_link-list">
-                    <a href="#" class="footer3_link">Services</a>
-                    <a href="#" class="footer3_link">Nos engagements</a>
-                    <a href="#" class="footer3_link">Politique qualité</a>
-                    <a href="#" class="footer3_link">Zones desservies</a>
-                    <a href="#" class="footer3_link">Mentions légales</a>
+                    <a href="index.html#services" class="footer3_link">Services</a>
+                    <a href="index.html#about" class="footer3_link">Nos engagements</a>
+                    <a href="index.html#about" class="footer3_link">Politique qualité</a>
+                    <a href="index.html#services" class="footer3_link">Zones desservies</a>
+                    <a href="index.html#about" class="footer3_link">Mentions légales</a>
                   </div>
                 </div>
               </div>
@@ -1036,9 +1299,9 @@ margin: 0rem !important;
               <div class="footer3_bottom-wrapper">
                 <div class="footer3_credit-text">© 2024 Déménagement Veillette &amp; Fils. Tous droits réservés.</div>
                 <div class="w-layout-grid footer3_legal-list">
-                  <a href="#" class="footer3_legal-link">Politique de confidentialité</a>
-                  <a href="#" class="footer3_legal-link">Conditions de service</a>
-                  <a href="#" class="footer3_legal-link">Paramètres des cookies</a>
+                  <a href="index.html#privacy" class="footer3_legal-link">Politique de confidentialité</a>
+                  <a href="index.html#terms" class="footer3_legal-link">Conditions de service</a>
+                  <a href="index.html#cookies" class="footer3_legal-link">Paramètres des cookies</a>
                 </div>
               </div>
             </div>
