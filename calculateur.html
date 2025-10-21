@@ -453,6 +453,13 @@
   line-height: 1.5;
 }
 
+.estimation-note {
+  color: #9ca3af !important;
+  font-size: 12px !important;
+  font-style: italic !important;
+  margin-bottom: 20px !important;
+}
+
 /* Flatpickr Styling */
 .flatpickr-calendar {
   background: #ffffff !important;
@@ -1910,6 +1917,14 @@ margin: 0rem !important;
                       <input type="number" id="distance" name="distance" class="form-input" placeholder="25" min="0" max="1000" required>
                     </div>
                     <div class="form-group">
+                      <label for="address-from" class="form-label">Adresse de départ *</label>
+                      <input type="text" id="address-from" name="address-from" class="form-input" placeholder="123 Rue Example, Montréal, QC" required>
+                    </div>
+                    <div class="form-group">
+                      <label for="address-to" class="form-label">Adresse de destination *</label>
+                      <input type="text" id="address-to" name="address-to" class="form-input" placeholder="456 Avenue Destination, Laval, QC" required>
+                    </div>
+                    <div class="form-group">
                       <label class="form-label">Étages (sans ascenseur) *</label>
                       <div class="radio-group">
                         <label class="radio-option">
@@ -2024,6 +2039,7 @@ margin: 0rem !important;
                       </div>
                       <div class="results-footer">
                         <p>Un expert vous contactera dans les 48h pour confirmer votre estimation.</p>
+                        <p class="estimation-note">* Cette estimation est indicative. Le prix final sera plus précis lors de l'appel de notre expert.</p>
                         <button type="button" class="btn btn-secondary" onclick="resetForm()">Nouvelle estimation</button>
                       </div>
                     </div>
