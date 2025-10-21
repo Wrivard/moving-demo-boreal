@@ -494,6 +494,44 @@
   color: #1f2937;
 }
 
+/* Google Places Autocomplete Styling */
+.pac-container {
+  background-color: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+  margin-top: 4px !important;
+  font-family: inherit !important;
+  z-index: 1000 !important;
+}
+
+.pac-item {
+  padding: 12px 16px !important;
+  border-bottom: 1px solid #f1f5f9 !important;
+  cursor: pointer !important;
+  font-size: 14px !important;
+  color: #374151 !important;
+}
+
+.pac-item:last-child {
+  border-bottom: none !important;
+}
+
+.pac-item:hover,
+.pac-item-selected {
+  background-color: #f8fafc !important;
+  color: #1f2937 !important;
+}
+
+.pac-item-query {
+  color: #1f2937 !important;
+  font-weight: 500 !important;
+}
+
+.pac-matched {
+  font-weight: 600 !important;
+  color: #3b82f6 !important;
+}
 
 .form-group {
   position: relative;
@@ -2581,130 +2619,136 @@ margin: 0rem !important;
       initAddressAutocomplete();
     }
 
-    // Enhanced Address Autocomplete (No External APIs)
+    // Google Places Autocomplete Implementation
     function initAddressAutocomplete() {
+      // Get API key from Vercel environment variable
+      fetch('/api/get-maps-key')
+        .then(response => response.json())
+        .then(data => {
+          if (data.apiKey) {
+            // Load Google Maps API with Places library
+            loadGoogleMapsAPI(data.apiKey);
+          } else {
+            console.warn('Google Maps API key not found, using fallback');
+            initFallbackAutocomplete();
+          }
+        })
+        .catch(error => {
+          console.warn('Failed to load Google Maps API key, using fallback:', error);
+          initFallbackAutocomplete();
+        });
+    }
+
+    function loadGoogleMapsAPI(apiKey) {
+      // Check if Google Maps is already loaded
+      if (window.google && window.google.maps) {
+        initGooglePlacesAutocomplete();
+        return;
+      }
+
+      // Create script element
+      const script = document.createElement('script');
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&callback=initGooglePlacesAutocomplete`;
+      script.async = true;
+      script.defer = true;
+      script.onerror = function() {
+        console.warn('Failed to load Google Maps API, using fallback');
+        initFallbackAutocomplete();
+      };
+      
+      // Add to head
+      document.head.appendChild(script);
+    }
+
+    // Global callback function for Google Maps API
+    window.initGooglePlacesAutocomplete = function() {
       const fromInput = document.getElementById('address-from');
       const toInput = document.getElementById('address-to');
       
-      // Comprehensive Quebec addresses database
-      const quebecAddresses = [
-        // Montreal areas
-        'Montréal, QC', 'Montreal, QC', 'Montréal-Nord, QC', 'Montréal-Est, QC', 'Montréal-Ouest, QC',
-        'Verdun, QC', 'Lasalle, QC', 'Lachine, QC', 'Saint-Laurent, QC', 'Pierrefonds, QC',
-        'Roxboro, QC', 'Dollard-des-Ormeaux, QC', 'Pointe-Claire, QC', 'Kirkland, QC', 'Beaconsfield, QC',
-        'Baie-d\'Urfé, QC', 'Sainte-Anne-de-Bellevue, QC', 'Senneville, QC', 'Westmount, QC',
-        'Côte-Saint-Luc, QC', 'Hampstead, QC', 'Mont-Royal, QC', 'Outremont, QC',
+      if (fromInput && window.google && window.google.maps && window.google.maps.places) {
+        const fromAutocomplete = new google.maps.places.Autocomplete(fromInput, {
+          types: ['address'],
+          componentRestrictions: { country: 'ca' },
+          fields: ['formatted_address', 'address_components']
+        });
         
-        // Laval
-        'Laval, QC', 'Chomedey, QC', 'Duvernay, QC', 'Fabreville, QC', 'Laval-des-Rapides, QC',
-        'Laval-Ouest, QC', 'Pont-Viau, QC', 'Sainte-Dorothée, QC', 'Sainte-Rose, QC',
+        fromAutocomplete.addListener('place_changed', function() {
+          const place = fromAutocomplete.getPlace();
+          if (place.formatted_address) {
+            fromInput.value = place.formatted_address;
+          }
+        });
+      }
+
+      if (toInput && window.google && window.google.maps && window.google.maps.places) {
+        const toAutocomplete = new google.maps.places.Autocomplete(toInput, {
+          types: ['address'],
+          componentRestrictions: { country: 'ca' },
+          fields: ['formatted_address', 'address_components']
+        });
         
-        // Quebec City areas
-        'Québec, QC', 'Quebec City, QC', 'Lévis, QC', 'Beauport, QC', 'Charlesbourg, QC',
-        'Limoilou, QC', 'Montmorency, QC', 'Sainte-Foy, QC', 'Sillery, QC', 'Vanier, QC',
-        
-        // Other major cities
-        'Gatineau, QC', 'Hull, QC', 'Aylmer, QC', 'Buckingham, QC', 'Masson-Angers, QC',
-        'Longueuil, QC', 'Boucherville, QC', 'Brossard, QC', 'Saint-Lambert, QC', 'Greenfield Park, QC',
-        'Sherbrooke, QC', 'Lennoxville, QC', 'Rock Forest, QC', 'Fleurimont, QC',
-        'Saguenay, QC', 'Chicoutimi, QC', 'Jonquière, QC', 'La Baie, QC',
-        'Trois-Rivières, QC', 'Cap-de-la-Madeleine, QC', 'Pointe-du-Lac, QC',
-        'Terrebonne, QC', 'Lachenaie, QC', 'La Plaine, QC',
-        'Saint-Jean-sur-Richelieu, QC', 'Iberville, QC', 'Saint-Luc, QC',
-        'Repentigny, QC', 'Le Gardeur, QC',
-        'Drummondville, QC', 'Saint-Nicéphore, QC',
-        'Saint-Jérôme, QC', 'Bellefeuille, QC', 'Lafontaine, QC',
-        'Granby, QC', 'Bromont, QC', 'Cowansville, QC',
-        'Blainville, QC', 'Sainte-Thérèse, QC', 'Rosemère, QC',
-        'Saint-Hyacinthe, QC', 'La Présentation, QC',
-        'Rimouski, QC', 'Le Bic, QC', 'Pointe-au-Père, QC',
-        'Shawinigan, QC', 'Grand-Mère, QC', 'Shawinigan-Sud, QC',
-        'Baie-Comeau, QC', 'Pointe-Lebel, QC', 'Chute-aux-Outardes, QC',
-        'Rouyn-Noranda, QC', 'Cadillac, QC', 'Dubuisson, QC',
-        'Val-d\'Or, QC', 'Malartic, QC', 'Rivière-Héva, QC',
-        'Joliette, QC', 'Notre-Dame-des-Prairies, QC', 'Saint-Charles-Borromée, QC',
-        'Victoriaville, QC', 'Arthabaska, QC', 'Warwick, QC',
-        'Salaberry-de-Valleyfield, QC', 'Coteau-du-Lac, QC', 'Les Cèdres, QC',
-        'Sorel-Tracy, QC', 'Contrecœur, QC', 'Saint-Roch-de-Richelieu, QC',
-        'Magog, QC', 'Omerville, QC', 'Austin, QC',
-        'Cowansville, QC', 'Dunham, QC', 'Frelighsburg, QC',
-        'Huntingdon, QC', 'Ormstown, QC', 'Sainte-Martine, QC',
-        'Vaudreuil-Dorion, QC', 'Pincourt, QC', 'L\'Île-Perrot, QC',
-        'Saint-Eustache, QC', 'Deux-Montagnes, QC', 'Oka, QC',
-        'Mirabel, QC', 'Sainte-Scholastique, QC', 'Saint-Augustin, QC',
-        'Saint-Colomban, QC', 'Sainte-Monique, QC'
+        toAutocomplete.addListener('place_changed', function() {
+          const place = toAutocomplete.getPlace();
+          if (place.formatted_address) {
+            toInput.value = place.formatted_address;
+          }
+        });
+      }
+    };
+
+    // Fallback autocomplete for when Google Places fails
+    function initFallbackAutocomplete() {
+      const fromInput = document.getElementById('address-from');
+      const toInput = document.getElementById('address-to');
+      
+      const quebecCities = [
+        'Montréal, QC', 'Québec, QC', 'Laval, QC', 'Gatineau, QC', 'Longueuil, QC',
+        'Sherbrooke, QC', 'Saguenay, QC', 'Lévis, QC', 'Trois-Rivières, QC', 'Terrebonne, QC',
+        'Saint-Jean-sur-Richelieu, QC', 'Repentigny, QC', 'Brossard, QC', 'Drummondville, QC',
+        'Saint-Jérôme, QC', 'Granby, QC', 'Blainville, QC', 'Saint-Hyacinthe, QC',
+        'Dollard-des-Ormeaux, QC', 'Pointe-Claire, QC', 'Westmount, QC', 'Kirkland, QC',
+        'Beaconsfield, QC', 'Baie-Comeau, QC', 'Rimouski, QC', 'Shawinigan, QC'
       ];
 
       function createAutocomplete(input, suggestions) {
         let autocompleteList = null;
         
         input.addEventListener('input', function() {
-          const value = this.value.toLowerCase().trim();
+          const value = this.value.toLowerCase();
           if (value.length < 2) {
             hideAutocomplete();
             return;
           }
           
-          // Find matches (case insensitive, partial matches)
-          const matches = suggestions.filter(address => 
-            address.toLowerCase().includes(value)
-          ).sort((a, b) => {
-            // Prioritize exact matches and matches that start with the input
-            const aStartsWith = a.toLowerCase().startsWith(value);
-            const bStartsWith = b.toLowerCase().startsWith(value);
-            if (aStartsWith && !bStartsWith) return -1;
-            if (!aStartsWith && bStartsWith) return 1;
-            return a.localeCompare(b);
-          });
+          const matches = suggestions.filter(city => 
+            city.toLowerCase().includes(value)
+          );
           
           if (matches.length > 0) {
-            showAutocomplete(matches, value);
+            showAutocomplete(matches);
           } else {
             hideAutocomplete();
           }
         });
         
         input.addEventListener('blur', function() {
-          // Delay hiding to allow clicking on suggestions
           setTimeout(hideAutocomplete, 200);
         });
         
-        input.addEventListener('focus', function() {
-          // Show suggestions if there's already text
-          if (this.value.length >= 2) {
-            const value = this.value.toLowerCase().trim();
-            const matches = suggestions.filter(address => 
-              address.toLowerCase().includes(value)
-            ).slice(0, 5);
-            if (matches.length > 0) {
-              showAutocomplete(matches, value);
-            }
-          }
-        });
-        
-        function showAutocomplete(matches, searchValue) {
+        function showAutocomplete(matches) {
           hideAutocomplete();
           
           autocompleteList = document.createElement('div');
           autocompleteList.className = 'address-autocomplete';
           
-          matches.slice(0, 8).forEach(match => {
+          matches.slice(0, 5).forEach(match => {
             const item = document.createElement('div');
             item.className = 'autocomplete-item';
-            
-            // Highlight matching text
-            const highlightedText = match.replace(
-              new RegExp(`(${searchValue})`, 'gi'),
-              '<strong>$1</strong>'
-            );
-            item.innerHTML = highlightedText;
-            
+            item.textContent = match;
             item.addEventListener('click', function() {
               input.value = match;
               hideAutocomplete();
-              input.focus();
             });
-            
             autocompleteList.appendChild(item);
           });
           
@@ -2719,8 +2763,8 @@ margin: 0rem !important;
         }
       }
       
-      if (fromInput) createAutocomplete(fromInput, quebecAddresses);
-      if (toInput) createAutocomplete(toInput, quebecAddresses);
+      if (fromInput) createAutocomplete(fromInput, quebecCities);
+      if (toInput) createAutocomplete(toInput, quebecCities);
     }
 
     function showStep(stepNumber) {
