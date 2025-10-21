@@ -1,0 +1,12 @@
+{
+  "name": "moving-demo-boreal",
+  "version": "1.0.0",
+  "description": "Moving company calculator demo",
+  "scripts": {
+    "dev": "vercel dev",
+    "start": "vercel dev"
+  },
+  "keywords": ["moving", "calculator", "demo"],
+  "author": "Déménagement Boréal",
+  "license": "MIT"
+}
