@@ -2620,41 +2620,58 @@ margin: 0rem !important;
       initAddressAutocomplete();
     }
 
-    // Google Places Autocomplete Implementation
+    // Enhanced Address Autocomplete with proper error handling
     function initAddressAutocomplete() {
-      // Get API key from Vercel environment variable
-      fetch('/api/get-maps-key')
-        .then(response => response.json())
-        .then(data => {
-          if (data.apiKey) {
-            // Load Google Maps API with Places library
-            loadGoogleMapsAPI(data.apiKey);
-          } else {
-            console.warn('Google Maps API key not found, using fallback');
-            initFallbackAutocomplete();
-          }
-        })
-        .catch(error => {
-          console.warn('Failed to load Google Maps API key, using fallback:', error);
-          initFallbackAutocomplete();
-        });
+      // Always start with fallback to ensure fields work
+      initFallbackAutocomplete();
+      
+      // Try to load Google Places API in background
+      loadGooglePlacesAPI();
     }
 
-    function loadGoogleMapsAPI(apiKey) {
-      // Check if Google Maps is already loaded
-      if (window.google && window.google.maps) {
+    function loadGooglePlacesAPI() {
+      // Check if Google Maps is already loaded to prevent multiple inclusions
+      if (window.google && window.google.maps && window.google.maps.places) {
+        console.log('Google Maps already loaded, initializing autocomplete');
         initGooglePlacesAutocomplete();
         return;
       }
 
-      // Create script element
+      // Check if script is already being loaded
+      if (document.querySelector('script[src*="maps.googleapis.com"]')) {
+        console.log('Google Maps script already exists, waiting for load');
+        return;
+      }
+
+      // Get API key from Vercel environment variable
+      fetch('/api/get-maps-key')
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+          }
+          return response.json();
+        })
+        .then(data => {
+          if (data.apiKey && data.apiKey !== 'undefined') {
+            console.log('Loading Google Maps API with key');
+            loadGoogleMapsScript(data.apiKey);
+          } else {
+            console.warn('No valid API key found, using fallback autocomplete');
+          }
+        })
+        .catch(error => {
+          console.warn('Failed to get API key, using fallback autocomplete:', error);
+        });
+    }
+
+    function loadGoogleMapsScript(apiKey) {
+      // Create script element with proper attributes
       const script = document.createElement('script');
-      script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&callback=initGooglePlacesAutocomplete`;
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&callback=initGooglePlacesAutocomplete&loading=async`;
       script.async = true;
       script.defer = true;
       script.onerror = function() {
-        console.warn('Failed to load Google Maps API, using fallback');
-        initFallbackAutocomplete();
+        console.warn('Failed to load Google Maps API script');
       };
       
       // Add to head
@@ -2663,39 +2680,51 @@ margin: 0rem !important;
 
     // Global callback function for Google Maps API
     window.initGooglePlacesAutocomplete = function() {
+      console.log('Google Maps API loaded, initializing autocomplete');
+      
       const fromInput = document.getElementById('address-from');
       const toInput = document.getElementById('address-to');
       
       if (fromInput && window.google && window.google.maps && window.google.maps.places) {
-        // Use the working Autocomplete API (still functional for existing users)
-        const fromAutocomplete = new google.maps.places.Autocomplete(fromInput, {
-          types: ['address'],
-          componentRestrictions: { country: 'ca' },
-          fields: ['formatted_address', 'address_components']
-        });
-        
-        fromAutocomplete.addListener('place_changed', function() {
-          const place = fromAutocomplete.getPlace();
-          if (place.formatted_address) {
-            fromInput.value = place.formatted_address;
-          }
-        });
+        try {
+          const fromAutocomplete = new google.maps.places.Autocomplete(fromInput, {
+            types: ['address'],
+            componentRestrictions: { country: 'ca' },
+            fields: ['formatted_address', 'address_components']
+          });
+          
+          fromAutocomplete.addListener('place_changed', function() {
+            const place = fromAutocomplete.getPlace();
+            if (place.formatted_address) {
+              fromInput.value = place.formatted_address;
+            }
+          });
+          
+          console.log('From address autocomplete initialized');
+        } catch (error) {
+          console.warn('Failed to initialize from address autocomplete:', error);
+        }
       }
 
       if (toInput && window.google && window.google.maps && window.google.maps.places) {
-        // Use the working Autocomplete API (still functional for existing users)
-        const toAutocomplete = new google.maps.places.Autocomplete(toInput, {
-          types: ['address'],
-          componentRestrictions: { country: 'ca' },
-          fields: ['formatted_address', 'address_components']
-        });
-        
-        toAutocomplete.addListener('place_changed', function() {
-          const place = toAutocomplete.getPlace();
-          if (place.formatted_address) {
-            toInput.value = place.formatted_address;
-          }
-        });
+        try {
+          const toAutocomplete = new google.maps.places.Autocomplete(toInput, {
+            types: ['address'],
+            componentRestrictions: { country: 'ca' },
+            fields: ['formatted_address', 'address_components']
+          });
+          
+          toAutocomplete.addListener('place_changed', function() {
+            const place = toAutocomplete.getPlace();
+            if (place.formatted_address) {
+              toInput.value = place.formatted_address;
+            }
+          });
+          
+          console.log('To address autocomplete initialized');
+        } catch (error) {
+          console.warn('Failed to initialize to address autocomplete:', error);
+        }
       }
     };
 

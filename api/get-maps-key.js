@@ -17,8 +17,11 @@ export default function handler(req, res) {
   // Get the Google Maps API key from environment variables
   const apiKey = process.env.GOOGLE_MAPS_API_KEY;
   
-  if (!apiKey) {
-    return res.status(500).json({ 
+  // Log for debugging (remove in production)
+  console.log('API Key check:', apiKey ? 'Key found' : 'No key found');
+  
+  if (!apiKey || apiKey === 'undefined' || apiKey.trim() === '') {
+    return res.status(200).json({ 
       error: 'Google Maps API key not configured',
       apiKey: null 
     });
@@ -26,6 +29,7 @@ export default function handler(req, res) {
   
   // Return the API key
   res.status(200).json({ 
-    apiKey: apiKey 
+    apiKey: apiKey.trim(),
+    status: 'success'
   });
 }
