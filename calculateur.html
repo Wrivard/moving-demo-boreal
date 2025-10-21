@@ -2723,7 +2723,8 @@ margin: 0rem !important;
       }
       
       // Show loading state
-      distanceInput.value = 'Calculating...';
+      distanceInput.value = '';
+      distanceInput.placeholder = 'Calculating...';
       distanceInput.disabled = true;
       
       // Try to get API key for distance calculation
@@ -2783,9 +2784,10 @@ margin: 0rem !important;
         }
       } catch (error) {
         console.warn('Distance calculation failed:', error);
-        document.getElementById('distance').value = '';
-        document.getElementById('distance').disabled = false;
-        document.getElementById('distance').placeholder = 'Enter distance manually';
+        const distanceInput = document.getElementById('distance');
+        distanceInput.value = '';
+        distanceInput.disabled = false;
+        distanceInput.placeholder = 'Enter distance manually';
         showDistanceMessage('Could not calculate distance automatically. Please enter manually.', 'warning');
       }
     }

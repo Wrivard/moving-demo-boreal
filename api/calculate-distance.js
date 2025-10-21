@@ -38,6 +38,13 @@ export default async function handler(req, res) {
     );
 
     if (!response.ok) {
+      // If Distance Matrix API is not enabled, return a helpful error
+      if (response.status === 403) {
+        return res.status(400).json({
+          error: 'Distance Matrix API is not enabled for this project. Please enable it in Google Cloud Console.',
+          details: 'API_NOT_ENABLED'
+        });
+      }
       throw new Error(`Google API responded with status: ${response.status}`);
     }
 
@@ -58,13 +65,14 @@ export default async function handler(req, res) {
       } else {
         return res.status(400).json({
           error: 'Could not calculate distance between the provided addresses',
-          details: element.status
+          details: element.status || 'UNKNOWN_ERROR'
         });
       }
     } else {
       return res.status(400).json({
         error: 'Invalid response from Google Distance Matrix API',
-        details: data.status
+        details: data.status || 'UNKNOWN_ERROR',
+        fullResponse: data
       });
     }
 
