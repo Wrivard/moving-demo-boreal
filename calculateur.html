@@ -2747,17 +2747,41 @@ margin: 0rem !important;
     }
 
     function resetForm() {
+      // Reset the form
       document.getElementById('moving-calculator-form').reset();
+      
+      // Hide results
       document.getElementById('results').style.display = 'none';
+      
+      // Show all form steps again
+      const formSteps = document.querySelectorAll('.form-step');
+      formSteps.forEach(step => {
+        step.style.display = 'none';
+        step.classList.remove('active');
+      });
       
       // Show navigation again
       const navigation = document.querySelector('.form-navigation');
       if (navigation) navigation.style.display = 'flex';
       
+      // Reset to first step
       currentStep = 0;
       showStep(0);
       updateProgress();
+      
+      // Clear any error messages
+      const errorMessages = document.querySelectorAll('.field-error');
+      errorMessages.forEach(msg => msg.remove());
+      
+      // Reset Flatpickr if it exists
+      const dateInput = document.getElementById('date');
+      if (dateInput && dateInput._flatpickr) {
+        dateInput._flatpickr.clear();
+      }
     }
+
+    // Make resetForm globally accessible
+    window.resetForm = resetForm;
 
     // Initialize when page loads
     document.addEventListener('DOMContentLoaded', initCalculator);
