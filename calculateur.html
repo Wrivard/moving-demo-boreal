@@ -2749,30 +2749,37 @@ margin: 0rem !important;
 
     async function calculateDistanceWithAPI(fromAddress, toAddress, apiKey) {
       try {
-        // Use Google Distance Matrix API
-        const response = await fetch(`https://maps.googleapis.com/maps/api/distancematrix/json?origins=${encodeURIComponent(fromAddress)}&destinations=${encodeURIComponent(toAddress)}&units=metric&key=${apiKey}`);
+        // Use our server-side API endpoint to avoid CORS issues
+        const response = await fetch('/api/calculate-distance', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            fromAddress: fromAddress,
+            toAddress: toAddress
+          })
+        });
         
         if (response.ok) {
           const data = await response.json();
           
-          if (data.status === 'OK' && data.rows[0] && data.rows[0].elements[0]) {
-            const element = data.rows[0].elements[0];
+          if (data.success && data.distance) {
+            document.getElementById('distance').value = data.distance;
+            document.getElementById('distance').disabled = false;
             
-            if (element.status === 'OK' && element.distance) {
-              const distanceKm = Math.round(element.distance.value / 1000);
-              document.getElementById('distance').value = distanceKm;
-              document.getElementById('distance').disabled = false;
-              
-              // Show success message
-              showDistanceMessage(`Distance calculated: ${distanceKm} km`, 'success');
-            } else {
-              throw new Error('Distance calculation failed');
+            // Show success message with duration if available
+            let message = `Distance calculated: ${data.distance} km`;
+            if (data.duration) {
+              message += ` (${data.duration})`;
             }
+            showDistanceMessage(message, 'success');
           } else {
-            throw new Error('Invalid response from Distance Matrix API');
+            throw new Error(data.error || 'Distance calculation failed');
           }
         } else {
-          throw new Error(`HTTP ${response.status}`);
+          const errorData = await response.json();
+          throw new Error(errorData.error || `HTTP ${response.status}`);
         }
       } catch (error) {
         console.warn('Distance calculation failed:', error);
