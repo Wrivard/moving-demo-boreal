@@ -2753,11 +2753,11 @@ margin: 0rem !important;
       // Hide results
       document.getElementById('results').style.display = 'none';
       
-      // Show all form steps again
+      // Reset all form steps
       const formSteps = document.querySelectorAll('.form-step');
       formSteps.forEach(step => {
-        step.style.display = 'none';
         step.classList.remove('active');
+        step.style.display = ''; // Remove inline style to let CSS take over
       });
       
       // Show navigation again
